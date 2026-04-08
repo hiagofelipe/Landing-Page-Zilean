@@ -1,0 +1,2289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SZilean — Software Fundamentalista de Valuation</title>
+  <meta name="description" content="Valuation por Fluxo de Caixa Descontado para acoes brasileiras. Projete o futuro, desconte ao presente, descubra o valor justo. Gratuito." />
+  <link rel="icon" type="image/svg+xml" href="frontend/public/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+/* ============================================================
+   SZilean Landing Page — Design System
+   ============================================================ */
+:root {
+  --primary:       #061535;
+  --primary-800:   #0A1F4E;
+  --primary-700:   #0D2860;
+  --primary-600:   #1A3A8F;
+  --primary-light: #1E5AAF;
+  --primary-soft:  #2563EB;
+  --accent:        #0284C7;
+  --accent-400:    #0EA5E9;
+  --accent-300:    #38BDF8;
+  --accent-100:    #E0F2FE;
+  --bg:            #F3F7FF;
+  --card:          #FFFFFF;
+  --surface-1:     #F8FAFF;
+  --surface-2:     #EFF4FF;
+  --text:          #0B1325;
+  --text-2:        #3D5175;
+  --text-3:        #8098B5;
+  --border:        #DDE6F5;
+  --border-2:      #C4D4EC;
+  --positive:      #059669;
+  --positive-bg:   #ECFDF5;
+  --negative:      #DC2626;
+  --negative-bg:   #FEF2F2;
+  --gold:          #D97706;
+  --gold-bg:       #FFFBEB;
+  --shadow-sm:  0 1px 3px rgba(6,21,53,0.05), 0 2px 8px rgba(6,21,53,0.04);
+  --shadow:     0 2px 10px rgba(6,21,53,0.07), 0 1px 3px rgba(6,21,53,0.04);
+  --shadow-md:  0 4px 20px rgba(6,21,53,0.09), 0 2px 6px rgba(6,21,53,0.05);
+  --shadow-lg:  0 8px 32px rgba(6,21,53,0.12), 0 3px 10px rgba(6,21,53,0.06);
+  --shadow-xl:  0 20px 60px rgba(6,21,53,0.18), 0 6px 20px rgba(6,21,53,0.08);
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  --ease:        cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --nav-h: 64px;
+  --section-py: 120px;
+  --container: 1200px;
+  --scen-blue:  #38BDF8;
+  --scen-green: #34D399;
+  --scen-red:   #F87171;
+  --scen-active: var(--scen-blue);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.container { max-width: var(--container); margin: 0 auto; padding: 0 24px; }
+
+/* ── Reveal animation ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: rgba(6,21,53,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(56,189,248,0.12);
+  transition: background 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.nav.scrolled {
+  background: rgba(6,21,53,0.97);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+}
+.nav-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900; font-size: 15px;
+  color: var(--primary);
+  position: relative; overflow: hidden;
+  box-shadow: 0 0 20px rgba(14,165,233,0.35);
+  flex-shrink: 0;
+}
+.nav-logo-icon::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%);
+  animation: shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-120%) rotate(45deg); }
+  35%  { transform: translateX(200%) rotate(45deg); }
+  100% { transform: translateX(200%) rotate(45deg); }
+}
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 22px;
+  color: #fff; letter-spacing: -0.3px;
+}
+.nav-logo-text span { color: var(--accent-300); }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-link {
+  font-size: 14px; font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  transition: color 0.2s var(--ease);
+  position: relative;
+}
+.nav-link:hover { color: #fff; }
+.nav-link::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent-300);
+  transform: scaleX(0);
+  transition: transform 0.25s var(--ease);
+}
+.nav-link:hover::after { transform: scaleX(1); }
+.nav-cta {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
+  color: var(--primary);
+  font-weight: 700; font-size: 14px;
+  border-radius: 10px;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.2s var(--ease);
+  box-shadow: 0 4px 16px rgba(14,165,233,0.35);
+}
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(14,165,233,0.5);
+}
+/* Mobile menu */
+.nav-hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  width: 28px; padding: 4px 0;
+}
+.nav-hamburger span {
+  display: block; height: 2px;
+  background: #fff; border-radius: 2px;
+  transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed; top: var(--nav-h); left: 0; right: 0;
+    background: rgba(6,21,53,0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column; gap: 0;
+    padding: 16px 24px 24px;
+    border-bottom: 1px solid rgba(56,189,248,0.12);
+    transform: translateY(-110%);
+    opacity: 0;
+    transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+    pointer-events: none;
+  }
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-link { padding: 12px 0; font-size: 16px; width: 100%; }
+  .nav-cta { margin-top: 8px; text-align: center; width: 100%; display: block; }
+  .nav-hamburger { display: flex; }
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center;
+  background: linear-gradient(165deg, #061535 0%, #0A1F4E 40%, #0D2860 70%, #1A3A8F 100%);
+  overflow: hidden;
+  padding-top: var(--nav-h);
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+}
+.hero-glow-1 {
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(14,165,233,0.12) 0%, transparent 70%);
+  top: -200px; right: -100px;
+  pointer-events: none;
+}
+.hero-glow-2 {
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(37,99,235,0.1) 0%, transparent 70%);
+  bottom: -100px; left: -50px;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 80px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.hero-left { max-width: 560px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px 6px 10px;
+  background: rgba(56,189,248,0.1);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 100px;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent-300);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.hero-badge-dot {
+  width: 8px; height: 8px;
+  background: var(--accent-300);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+}
+.hero h1 .accent { color: var(--accent-300); }
+.hero h1 .accent-2 { color: var(--accent-400); }
+.hero-sub {
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 40px;
+  max-width: 480px;
+}
+.hero-sub strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 36px;
+  background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
+  color: var(--primary);
+  font-weight: 700; font-size: 15px;
+  border-radius: 12px;
+  transition: transform 0.2s var(--ease-spring), box-shadow 0.3s var(--ease);
+  box-shadow: 0 8px 28px rgba(14,165,233,0.4);
+  letter-spacing: 0.02em;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(14,165,233,0.55);
+}
+.btn-primary svg { width: 18px; height: 18px; }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 28px;
+  border: 1px solid rgba(56,189,248,0.3);
+  color: var(--accent-300);
+  font-weight: 600; font-size: 15px;
+  border-radius: 12px;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.btn-secondary:hover {
+  background: rgba(56,189,248,0.08);
+  border-color: rgba(56,189,248,0.5);
+}
+.hero-free-tag {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 20px;
+  font-size: 13px; color: rgba(255,255,255,0.4);
+}
+.hero-free-tag svg { width: 14px; height: 14px; fill: var(--positive); }
+.hero-free-tag strong { color: var(--positive); }
+
+/* Hero right — mock card */
+.hero-right { position: relative; }
+.hero-mock {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(56,189,248,0.12);
+  border-radius: 20px;
+  padding: 32px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+.hero-mock::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-300), var(--accent));
+}
+.hero-mock-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px;
+}
+.hero-mock-ticker {
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-mock-ticker-badge {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, #0369a1, #0EA5E9);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 14px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(14,165,233,0.4);
+}
+.hero-mock-ticker-name {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 18px;
+  color: #fff;
+}
+.hero-mock-ticker-sub {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.hero-mock-price {
+  text-align: right;
+}
+.hero-mock-price-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.hero-mock-price-val {
+  font-family: var(--font-mono);
+  font-weight: 700; font-size: 24px;
+  color: var(--positive);
+}
+.hero-mock-metrics {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px; margin-bottom: 24px;
+}
+.hero-metric {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(56,189,248,0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.hero-metric-label {
+  font-size: 10px; font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.hero-metric-val {
+  font-family: var(--font-mono);
+  font-weight: 700; font-size: 18px;
+  color: #fff;
+}
+.hero-metric-val.pos { color: var(--positive); }
+.hero-mini-chart {
+  height: 80px;
+  display: flex; align-items: flex-end; gap: 3px;
+  padding: 8px 0;
+}
+.hero-mini-bar {
+  flex: 1;
+  background: linear-gradient(to top, rgba(14,165,233,0.3), rgba(56,189,248,0.7));
+  border-radius: 3px 3px 0 0;
+  min-height: 8px;
+  transition: height 0.6s var(--ease);
+}
+.hero-mini-bar.proj { opacity: 0.5; }
+
+@media (max-width: 960px) {
+  .hero-content { grid-template-columns: 1fr; gap: 48px; }
+  .hero-left { max-width: 100%; }
+  .hero-right { max-width: 500px; margin: 0 auto; }
+}
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; width: 100%; }
+  .hero-actions a, .hero-actions button { width: 100%; justify-content: center; }
+}
+
+/* ============================================================
+   SECTION COMMON
+   ============================================================ */
+.section { padding: var(--section-py) 0; }
+.section-dark {
+  background: linear-gradient(165deg, #061535 0%, #0A1F4E 100%);
+  color: #fff;
+}
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+}
+.section-label-dark { color: var(--accent-300); }
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin-bottom: 20px;
+}
+.section-sub {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-2);
+  max-width: 640px;
+}
+.section-dark .section-sub { color: rgba(255,255,255,0.5); }
+.section-header { margin-bottom: 64px; }
+.section-header.center { text-align: center; }
+.section-header.center .section-sub { margin: 0 auto; }
+
+/* ============================================================
+   PROBLEMA / COMPARACAO
+   ============================================================ */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 40px;
+  align-items: stretch;
+}
+.compare-card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 40px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.compare-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.compare-card--old::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #8098B5, #B8D0F0);
+}
+.compare-card--new::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0EA5E9, #38BDF8);
+}
+.compare-card-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+}
+.compare-card--old .compare-card-icon {
+  background: var(--surface-2);
+  color: var(--text-3);
+}
+.compare-card--new .compare-card-icon {
+  background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(56,189,248,0.1));
+  color: var(--accent);
+}
+.compare-card-icon svg { width: 24px; height: 24px; }
+.compare-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 22px;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.compare-card p {
+  font-size: 15px; line-height: 1.7;
+  color: var(--text-2);
+  margin-bottom: 24px;
+}
+.compare-card-items { list-style: none; }
+.compare-card-items li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0;
+  font-size: 14px; color: var(--text-2);
+  border-bottom: 1px solid var(--border);
+}
+.compare-card-items li:last-child { border-bottom: none; }
+.compare-card-items li svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+.compare-card--old .compare-card-items li svg { color: var(--text-3); }
+.compare-card--new .compare-card-items li svg { color: var(--accent); }
+
+/* Indicadores grid (mockup da imagem) */
+.old-indicators {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.old-ind {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  position: relative;
+}
+.old-ind-label {
+  font-size: 10px; font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.old-ind-val {
+  font-family: var(--font-mono);
+  font-weight: 700; font-size: 15px;
+  color: var(--text);
+}
+.old-ind-q {
+  width: 14px; height: 14px;
+  color: var(--text-3);
+  opacity: 0.5;
+}
+
+.compare-arrow {
+  display: flex; align-items: center; justify-content: center;
+  align-self: center;
+}
+.compare-arrow-circle {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-400), var(--accent-300));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 28px rgba(14,165,233,0.35);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+.compare-arrow-circle svg { width: 24px; height: 24px; }
+
+@media (max-width: 960px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .compare-arrow { transform: rotate(90deg); }
+  .old-indicators { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .old-indicators { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================
+   FEATURES GRID
+   ============================================================ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 32px;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(14,165,233,0.2);
+}
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(14,165,233,0.12), rgba(56,189,248,0.08));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.feature-icon svg { width: 22px; height: 22px; }
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 18px;
+  margin-bottom: 10px;
+  letter-spacing: -0.2px;
+}
+.feature-card p {
+  font-size: 14px; line-height: 1.7;
+  color: var(--text-2);
+}
+@media (max-width: 768px) {
+  .features-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   SCENARIOS SECTION
+   ============================================================ */
+.scenarios-section {
+  position: relative;
+  overflow: hidden;
+}
+.scenarios-section .section-dark-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(165deg, #061535 0%, #0A1F4E 100%);
+  z-index: 0;
+}
+.scenarios-section .container { position: relative; z-index: 1; }
+.scen-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 48px;
+  justify-content: center;
+}
+.scen-tab {
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600; font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.35s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.scen-tab::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.scen-tab:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.2); }
+.scen-tab.active { color: #fff; }
+.scen-tab[data-scen="base"].active {
+  border-color: var(--scen-blue);
+  background: rgba(56,189,248,0.12);
+  box-shadow: 0 0 24px rgba(56,189,248,0.2);
+}
+.scen-tab[data-scen="otimista"].active {
+  border-color: var(--scen-green);
+  background: rgba(52,211,153,0.12);
+  box-shadow: 0 0 24px rgba(52,211,153,0.2);
+}
+.scen-tab[data-scen="pessimista"].active {
+  border-color: var(--scen-red);
+  background: rgba(248,113,113,0.12);
+  box-shadow: 0 0 24px rgba(248,113,113,0.2);
+}
+.scen-tab-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.scen-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 48px;
+}
+.scen-metric-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+}
+.scen-metric-label {
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.scen-metric-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 28px;
+  color: #fff;
+  transition: color 0.4s var(--ease);
+}
+.scen-metric-sub {
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 600;
+  transition: color 0.4s var(--ease);
+}
+
+.scen-chart-area {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 32px;
+}
+.scen-chart-title {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+}
+.scen-chart-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .scen-metrics { grid-template-columns: repeat(2, 1fr); }
+  .scen-tabs { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ============================================================
+   CHARTS SECTION
+   ============================================================ */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+.chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.chart-card--full { grid-column: 1 / -1; }
+.chart-card-title {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 16px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.chart-card-sub {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 16px;
+}
+.chart-legend {
+  display: flex; gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.chart-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600;
+  color: var(--text-3);
+}
+.chart-legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+@media (max-width: 768px) {
+  .charts-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   TOOLTIP DEMO SECTION
+   ============================================================ */
+.tooltip-demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.tooltip-demo-left p {
+  font-size: 16px; line-height: 1.7;
+  color: var(--text-2);
+  margin-bottom: 24px;
+}
+.tooltip-demo-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+.tooltip-demo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.tooltip-demo-row:last-child { border-bottom: none; }
+.tooltip-demo-row-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 500;
+  color: var(--text);
+}
+.tooltip-demo-row-val {
+  font-family: var(--font-mono);
+  font-weight: 700; font-size: 15px;
+}
+.tooltip-btn {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-2);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  flex-shrink: 0;
+  position: relative;
+}
+.tooltip-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(14,165,233,0.06);
+}
+.tooltip-popup {
+  position: absolute;
+  bottom: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 12px; font-weight: 400;
+  line-height: 1.6;
+  width: 280px;
+  box-shadow: var(--shadow-xl);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+  transform: translateX(-50%) translateY(4px);
+  z-index: 100;
+}
+.tooltip-popup::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--primary);
+}
+.tooltip-btn:hover .tooltip-popup,
+.tooltip-btn:focus .tooltip-popup {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.tooltip-popup-label {
+  font-weight: 700; font-size: 13px;
+  color: var(--accent-300);
+  margin-bottom: 6px;
+}
+@media (max-width: 768px) {
+  .tooltip-demo-grid { grid-template-columns: 1fr; }
+  .tooltip-popup { width: 220px; font-size: 11px; }
+}
+
+/* ============================================================
+   SENSITIVITY SECTION
+   ============================================================ */
+.sens-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.sens-text p {
+  font-size: 16px; line-height: 1.7;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 24px;
+}
+.sens-table-wrap {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 28px;
+  overflow-x: auto;
+}
+.sens-table-title {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+}
+.sens-table-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+.sens-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.sens-table th, .sens-table td {
+  padding: 10px 14px;
+  text-align: center;
+  white-space: nowrap;
+}
+.sens-table thead th {
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sens-table tbody td {
+  color: rgba(255,255,255,0.75);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.sens-table tbody td:first-child {
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  text-align: left;
+}
+.sens-table .sens-pos { color: var(--positive); font-weight: 600; }
+.sens-table .sens-neg { color: var(--negative); font-weight: 600; }
+.sens-table .sens-base {
+  background: rgba(56,189,248,0.1);
+  color: var(--accent-300);
+  font-weight: 700;
+  border-radius: 6px;
+}
+@media (max-width: 768px) {
+  .sens-wrapper { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   FAQ SECTION
+   ============================================================ */
+.faq-list { max-width: 800px; margin: 0 auto; }
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  background: var(--card);
+  overflow: hidden;
+  transition: box-shadow 0.3s var(--ease);
+}
+.faq-item:hover { box-shadow: var(--shadow-sm); }
+.faq-item.open { box-shadow: var(--shadow); }
+.faq-question {
+  width: 100%;
+  padding: 22px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 16px;
+  color: var(--text);
+  text-align: left;
+  transition: color 0.2s var(--ease);
+  gap: 16px;
+}
+.faq-question:hover { color: var(--accent); }
+.faq-chevron {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  color: var(--text-3);
+  transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+}
+.faq-item.open .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s var(--ease), padding 0.3s var(--ease);
+}
+.faq-item.open .faq-answer {
+  max-height: 500px;
+}
+.faq-answer-inner {
+  padding: 0 28px 24px;
+  font-size: 15px; line-height: 1.75;
+  color: var(--text-2);
+}
+.faq-answer-inner strong { color: var(--text); }
+
+/* ============================================================
+   CTA FINAL
+   ============================================================ */
+.cta-final {
+  text-align: center;
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+.cta-final-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.cta-final .container { position: relative; z-index: 1; }
+.cta-final h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 44px);
+  color: #fff;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+.cta-final p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 40px;
+  max-width: 520px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  background: #040D1F;
+  border-top: 1px solid rgba(56,189,248,0.08);
+  padding: 48px 0 32px;
+}
+.footer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.footer-brand-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #0EA5E9, #38BDF8);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900; font-size: 14px;
+  color: var(--primary);
+  box-shadow: 0 0 16px rgba(14,165,233,0.3);
+}
+.footer-brand-text {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 20px;
+  color: #fff;
+}
+.footer-brand-text span { color: var(--accent-300); }
+.footer-tagline {
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  max-width: 280px;
+  line-height: 1.6;
+}
+.footer-links {
+  display: flex; gap: 12px; align-items: center;
+}
+.footer-link-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  transition: all 0.2s var(--ease);
+}
+.footer-link-btn:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: #fff;
+  background: rgba(255,255,255,0.04);
+}
+.footer-link-btn svg { width: 18px; height: 18px; }
+.footer-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin-bottom: 24px;
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+}
+.footer-right {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.2);
+}
+.footer-hourglass {
+  display: inline-flex; align-items: center;
+  color: rgba(255,255,255,0.15);
+}
+.footer-hourglass svg { width: 14px; height: 20px; }
+/* Hourglass sand animation */
+.hg-sand-top { animation: hg-drain 4s ease-in-out infinite; transform-origin: center; }
+.hg-sand-bot { animation: hg-fill 4s ease-in-out infinite; transform-origin: center; }
+@keyframes hg-drain { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:0.3;transform:scaleY(0.3)} }
+@keyframes hg-fill { 0%,100%{opacity:0.3;transform:scaleY(0.3)} 50%{opacity:1;transform:scaleY(1)} }
+.hg-g { animation: hg-fall 4s linear infinite; }
+.hg-g1 { animation-delay: 0s; }
+.hg-g2 { animation-delay: 0.3s; }
+.hg-g3 { animation-delay: 0.6s; }
+.hg-g4 { animation-delay: 0.9s; }
+@keyframes hg-fall {
+  0% { transform: translate(0,-6px); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translate(0,6px); opacity: 0; }
+}
+
+/* ============================================================
+   MISC / UTILITY
+   ============================================================ */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* SVG Charts styling */
+.sz-chart-wrap svg { width: 100%; height: auto; display: block; }
+.sz-chart-wrap { user-select: none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--surface-1); }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* Selection */
+::selection { background: rgba(14,165,233,0.2); color: var(--text); }
+
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="SZilean Home">
+      <div class="nav-logo-icon">SZ</div>
+      <div class="nav-logo-text">S<span>Z</span>ilean</div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#como-funciona" class="nav-link">Como funciona</a>
+      <a href="#cenarios" class="nav-link">Cenarios</a>
+      <a href="#graficos" class="nav-link">Graficos</a>
+      <a href="#sensibilidade" class="nav-link">Sensibilidade</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="https://hiagofelipe.github.io/SZilean/#/login" class="nav-cta">Acessar sistema</a>
+    </div>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        100% Gratuito
+      </div>
+      <h1>
+        Projete o <span class="accent">futuro</span>,<br>
+        descubra o <span class="accent-2">valor justo</span> hoje.
+      </h1>
+      <p class="hero-sub">
+        A ferramenta de <strong>Valuation por Fluxo de Caixa Descontado</strong> que
+        eleva o nivel da sua analise fundamentalista. Projete receitas, lucros e
+        fluxos de caixa futuros, e descubra quanto uma empresa realmente vale.
+      </p>
+      <div class="hero-actions">
+        <a href="https://hiagofelipe.github.io/SZilean/#/login" class="btn-primary">
+          Acesse a ferramenta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+        <a href="#como-funciona" class="btn-secondary">Saiba mais</a>
+      </div>
+      <div class="hero-free-tag">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <strong>Gratuito para sempre</strong> — sem cartao, sem limites.
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-mock">
+        <div class="hero-mock-header">
+          <div class="hero-mock-ticker">
+            <div class="hero-mock-ticker-badge">EX</div>
+            <div>
+              <div class="hero-mock-ticker-name">EXEM3</div>
+              <div class="hero-mock-ticker-sub">Empresa Exemplo S.A.</div>
+            </div>
+          </div>
+          <div class="hero-mock-price">
+            <div class="hero-mock-price-label">Preco-alvo</div>
+            <div class="hero-mock-price-val">R$ 38,42</div>
+          </div>
+        </div>
+        <div class="hero-mock-metrics">
+          <div class="hero-metric">
+            <div class="hero-metric-label">Upside</div>
+            <div class="hero-metric-val pos">+53,7%</div>
+          </div>
+          <div class="hero-metric">
+            <div class="hero-metric-label">WACC</div>
+            <div class="hero-metric-val">12,5%</div>
+          </div>
+          <div class="hero-metric">
+            <div class="hero-metric-label">TIR</div>
+            <div class="hero-metric-val">18,2%</div>
+          </div>
+        </div>
+        <div class="hero-mini-chart" id="heroChart"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROBLEMA — Passado vs Futuro
+     ============================================================ -->
+<section class="section" id="como-funciona">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Por que ser diferente
+      </div>
+      <h2 class="section-title">A maioria olha para o passado.<br>O SZilean projeta o futuro.</h2>
+      <p class="section-sub">
+        Indicadores historicos ja sao conhecidos pelo mercado e, na maioria das vezes,
+        ja estao refletidos no preco atual. O verdadeiro diferencial esta em projetar
+        o que vem pela frente.
+      </p>
+    </div>
+
+    <div class="compare-grid">
+      <!-- OLD -->
+      <div class="compare-card compare-card--old reveal">
+        <div class="compare-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <h3>Abordagem tradicional</h3>
+        <p>Sistemas convencionais exibem indicadores que refletem o que ja aconteceu. O mercado ja precifica essas informacoes.</p>
+        <div class="old-indicators">
+          <div class="old-ind"><div class="old-ind-label">P/L <svg class="old-ind-q" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">?</text></svg></div><div class="old-ind-val">5,30</div></div>
+          <div class="old-ind"><div class="old-ind-label">P/VP</div><div class="old-ind-val">1,40</div></div>
+          <div class="old-ind"><div class="old-ind-label">ROE</div><div class="old-ind-val">26,49%</div></div>
+          <div class="old-ind"><div class="old-ind-label">ROIC</div><div class="old-ind-val">13,21%</div></div>
+          <div class="old-ind"><div class="old-ind-label">D.Y.</div><div class="old-ind-val">6,67%</div></div>
+          <div class="old-ind"><div class="old-ind-label">M.Bruta</div><div class="old-ind-val">47,63%</div></div>
+          <div class="old-ind"><div class="old-ind-label">M.Ebit</div><div class="old-ind-val">29,27%</div></div>
+          <div class="old-ind"><div class="old-ind-label">EV/EBITDA</div><div class="old-ind-val">4,11</div></div>
+        </div>
+        <ul class="compare-card-items">
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Indicadores calculados sobre dados ja publicados
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Informacao acessivel a qualquer participante do mercado
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Nao oferece vantagem analitica real na tomada de decisao
+          </li>
+        </ul>
+      </div>
+
+      <!-- ARROW -->
+      <div class="compare-arrow reveal reveal-delay-2">
+        <div class="compare-arrow-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+
+      <!-- NEW -->
+      <div class="compare-card compare-card--new reveal reveal-delay-3">
+        <div class="compare-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>A abordagem SZilean</h3>
+        <p>Projete receitas, custos e fluxos de caixa para os proximos 5 anos. Traga tudo a valor presente e descubra o valor justo.</p>
+        <ul class="compare-card-items">
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Projecao completa de DRE, Balanco e Fluxo de Caixa
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Valor Terminal com dois metodos (Gordon + EV/EBITDA)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Preco-alvo por acao, upside/downside e TIR implicita
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Analise de sensibilidade e cenarios multiplos
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Decisao baseada em projecoes suas, nao em dados do passado
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURES
+     ============================================================ -->
+<section class="section" style="padding-top: 0;">
+  <div class="container">
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
+        </div>
+        <h3>DCF completo</h3>
+        <p>Modelo de Fluxo de Caixa Descontado com 5 anos de projecao, WACC, crescimento perpetuo e valor terminal calculados em tempo real.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h3>Cenarios multiplos</h3>
+        <p>Compare cenarios base, otimista e pessimista lado a lado, com upside e preco-alvo calculados instantaneamente para cada um.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/></svg>
+        </div>
+        <h3>Graficos projetados</h3>
+        <p>Visualize receita, lucro, margens e fluxos de caixa futuros em graficos interativos com historico e projecao lado a lado.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+        </div>
+        <h3>Analise de sensibilidade</h3>
+        <p>Teste como variacoes no WACC, crescimento perpetuo e multiplos impactam o valor justo, visualizando tudo em tabelas dinamicas.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Indicadores completos</h3>
+        <p>ROE, ROIC, P/L, EV/EBITDA, margens, endividamento e mais de 20 indicadores projetados para cada ano, com explicacoes detalhadas.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Seus dados, sua conta</h3>
+        <p>Todas as suas analises ficam salvas na nuvem com seguranca e isolamento total. Acesse de qualquer lugar, a qualquer momento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CENARIOS INTERATIVOS
+     ============================================================ -->
+<section class="section section-dark scenarios-section" id="cenarios">
+  <div class="section-dark-bg"></div>
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label section-label-dark">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Cenarios
+      </div>
+      <h2 class="section-title" style="color:#fff">Compare cenarios, tome decisoes melhores</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.5)">
+        Crie cenarios base, otimista e pessimista para a mesma empresa. Ajuste premissas
+        e veja o impacto no preco-alvo em tempo real.
+      </p>
+    </div>
+
+    <div class="scen-tabs reveal" id="scenTabs">
+      <button class="scen-tab active" data-scen="base">
+        <span class="scen-tab-dot" style="background:var(--scen-blue)"></span>Base
+      </button>
+      <button class="scen-tab" data-scen="otimista">
+        <span class="scen-tab-dot" style="background:var(--scen-green)"></span>Otimista
+      </button>
+      <button class="scen-tab" data-scen="pessimista">
+        <span class="scen-tab-dot" style="background:var(--scen-red)"></span>Pessimista
+      </button>
+    </div>
+
+    <div class="scen-metrics reveal" id="scenMetrics">
+      <div class="scen-metric-card">
+        <div class="scen-metric-label">Preco-alvo</div>
+        <div class="scen-metric-value" id="scenPrice">R$ 38,42</div>
+      </div>
+      <div class="scen-metric-card">
+        <div class="scen-metric-label">Upside / Downside</div>
+        <div class="scen-metric-value" id="scenUpside">+53,7%</div>
+        <div class="scen-metric-sub" id="scenUpsideLabel" style="color:var(--positive)">Upside</div>
+      </div>
+      <div class="scen-metric-card">
+        <div class="scen-metric-label">Enterprise Value</div>
+        <div class="scen-metric-value" id="scenEV">4,8B</div>
+      </div>
+      <div class="scen-metric-card">
+        <div class="scen-metric-label">TIR Implicita</div>
+        <div class="scen-metric-value" id="scenTIR">18,2%</div>
+      </div>
+    </div>
+
+    <div class="scen-chart-area reveal" id="scenChartArea">
+      <div class="scen-chart-title">Receita Liquida e EBITDA Projetados</div>
+      <div class="scen-chart-sub">Empresa Exemplo S.A. — valores em R$ milhoes</div>
+      <svg id="scenChart" viewBox="0 0 640 270" style="width:100%;height:auto;display:block"></svg>
+      <div class="chart-legend" id="scenLegend" style="margin-top:12px">
+        <span class="chart-legend-item"><span class="chart-legend-dot" style="background:var(--scen-blue)"></span>Receita</span>
+        <span class="chart-legend-item"><span class="chart-legend-dot" style="background:rgba(255,255,255,0.4)"></span>EBITDA</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:48px" class="reveal">
+      <a href="https://hiagofelipe.github.io/SZilean/#/login" class="btn-primary">
+        Crie seus cenarios agora
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GRAFICOS
+     ============================================================ -->
+<section class="section" id="graficos">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-6"/></svg>
+        Visualizacao
+      </div>
+      <h2 class="section-title">Graficos que contam a historia do futuro</h2>
+      <p class="section-sub">
+        Visualize a projecao completa de uma empresa com graficos interativos.
+        Historico e projecao lado a lado, exatamente como voce ve no sistema.
+      </p>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card reveal">
+        <div class="chart-card-title">Receita Liquida e Lucro Bruto</div>
+        <div class="chart-card-sub">Empresa Exemplo S.A. — R$ milhoes</div>
+        <svg id="chartRevenue" viewBox="0 0 640 270" style="width:100%;height:auto;display:block"></svg>
+        <div class="chart-legend">
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#0EA5E9"></span>Receita</span>
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#38BDF8"></span>Lucro Bruto</span>
+        </div>
+      </div>
+      <div class="chart-card reveal reveal-delay-1">
+        <div class="chart-card-title">Margens Operacionais</div>
+        <div class="chart-card-sub">Evolucao historica e projetada</div>
+        <svg id="chartMargins" viewBox="0 0 560 230" style="width:100%;height:auto;display:block"></svg>
+        <div class="chart-legend">
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#0EA5E9"></span>M. Bruta</span>
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#38BDF8"></span>M. EBITDA</span>
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#7C3AED"></span>M. Liquida</span>
+        </div>
+      </div>
+      <div class="chart-card chart-card--full reveal">
+        <div class="chart-card-title">Fluxo de Caixa — Operacional, Investimento e Financiamento</div>
+        <div class="chart-card-sub">Empresa Exemplo S.A. — R$ milhoes</div>
+        <svg id="chartCF" viewBox="0 0 640 270" style="width:100%;height:auto;display:block"></svg>
+        <div class="chart-legend">
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#34D399"></span>FC Operacional</span>
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#F87171"></span>Investimentos</span>
+          <span class="chart-legend-item"><span class="chart-legend-dot" style="background:#FBBF24"></span>FC Livre</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TOOLTIP DEMO — Explicacoes detalhadas
+     ============================================================ -->
+<section class="section" style="background:var(--surface-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="tooltip-demo-grid">
+      <div class="tooltip-demo-left reveal">
+        <div class="section-label">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Didatico
+        </div>
+        <h2 class="section-title">Cada numero tem uma explicacao</h2>
+        <p>
+          Todas as linhas, indicadores e metricas do sistema possuem explicacoes
+          contextuais detalhadas. Basta passar o mouse sobre o icone de interrogacao
+          para entender o que cada valor representa e como ele e calculado.
+        </p>
+        <p>
+          Isso garante que voce nao apenas veja os numeros, mas compreenda a logica
+          por tras de cada um deles, elevando a qualidade da sua analise.
+        </p>
+        <a href="https://hiagofelipe.github.io/SZilean/#/login" class="btn-primary" style="margin-top:16px">
+          Entrar no sistema
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="tooltip-demo-card reveal reveal-delay-2">
+        <div class="tooltip-demo-row">
+          <span class="tooltip-demo-row-label">
+            Crescimento Receita
+            <span class="tooltip-btn" tabindex="0">?
+              <span class="tooltip-popup">
+                <span class="tooltip-popup-label">Taxa de Crescimento da Receita</span>
+                Percentual de crescimento da Receita Liquida em relacao ao ano anterior. E a premissa mais critica do modelo, pois impacta todas as linhas subsequentes da DRE.
+              </span>
+            </span>
+          </span>
+          <span class="tooltip-demo-row-val" style="color:var(--accent)">10,0%</span>
+        </div>
+        <div class="tooltip-demo-row">
+          <span class="tooltip-demo-row-label">
+            WACC
+            <span class="tooltip-btn" tabindex="0">?
+              <span class="tooltip-popup">
+                <span class="tooltip-popup-label">Taxa de Desconto (WACC)</span>
+                Custo Medio Ponderado de Capital. Representa a taxa minima de retorno exigida pelos investidores. Quanto maior, menor o valor presente dos fluxos futuros.
+              </span>
+            </span>
+          </span>
+          <span class="tooltip-demo-row-val">12,5%</span>
+        </div>
+        <div class="tooltip-demo-row">
+          <span class="tooltip-demo-row-label">
+            Margem EBITDA
+            <span class="tooltip-btn" tabindex="0">?
+              <span class="tooltip-popup">
+                <span class="tooltip-popup-label">Margem EBITDA</span>
+                EBITDA dividido pela Receita Liquida. Mede a eficiencia operacional antes de juros, impostos, depreciacao e amortizacao. Quanto maior, mais eficiente.
+              </span>
+            </span>
+          </span>
+          <span class="tooltip-demo-row-val" style="color:var(--positive)">32,4%</span>
+        </div>
+        <div class="tooltip-demo-row">
+          <span class="tooltip-demo-row-label">
+            Preco-alvo
+            <span class="tooltip-btn" tabindex="0">?
+              <span class="tooltip-popup">
+                <span class="tooltip-popup-label">Preco-alvo por acao</span>
+                Equity Value dividido pelo numero de acoes em circulacao. Representa o valor justo estimado para cada acao com base nas premissas projetadas.
+              </span>
+            </span>
+          </span>
+          <span class="tooltip-demo-row-val" style="color:var(--positive)">R$ 38,42</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SENSIBILIDADE
+     ============================================================ -->
+<section class="section section-dark" id="sensibilidade">
+  <div class="container">
+    <div class="sens-wrapper">
+      <div class="sens-text reveal">
+        <div class="section-label section-label-dark">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          Sensibilidade
+        </div>
+        <h2 class="section-title" style="color:#fff">Pequenas mudancas, grandes impactos</h2>
+        <p>
+          A analise de sensibilidade permite testar como variacoes em parametros-chave
+          afetam o preco-alvo. Veja o que acontece quando o WACC sobe 1 ponto percentual
+          ou quando o crescimento perpetuo muda.
+        </p>
+        <p>
+          O sistema gera tabelas dinamicas cruzando WACC com crescimento, WACC com
+          impostos, e variacoes no multiplo EV/EBITDA, tudo calculado instantaneamente.
+        </p>
+        <a href="https://hiagofelipe.github.io/SZilean/#/login" class="btn-primary" style="margin-top:16px">
+          Teste agora
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="sens-table-wrap reveal reveal-delay-2">
+        <div class="sens-table-title">WACC x Crescimento Perpetuo</div>
+        <div class="sens-table-sub">Preco-alvo por acao (R$) — Empresa Exemplo S.A.</div>
+        <table class="sens-table">
+          <thead>
+            <tr>
+              <th>WACC \ g</th>
+              <th>2,0%</th>
+              <th>3,0%</th>
+              <th>4,0%</th>
+              <th>5,0%</th>
+              <th>6,0%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10,5%</td>
+              <td class="sens-pos">49,18</td>
+              <td class="sens-pos">54,32</td>
+              <td class="sens-pos">61,07</td>
+              <td class="sens-pos">70,25</td>
+              <td class="sens-pos">83,41</td>
+            </tr>
+            <tr>
+              <td>11,5%</td>
+              <td class="sens-pos">42,56</td>
+              <td class="sens-pos">46,28</td>
+              <td class="sens-pos">51,03</td>
+              <td class="sens-pos">57,24</td>
+              <td class="sens-pos">65,80</td>
+            </tr>
+            <tr>
+              <td>12,5%</td>
+              <td>37,20</td>
+              <td>39,91</td>
+              <td class="sens-base">38,42</td>
+              <td class="sens-pos">47,58</td>
+              <td class="sens-pos">53,12</td>
+            </tr>
+            <tr>
+              <td>13,5%</td>
+              <td>32,85</td>
+              <td>34,77</td>
+              <td>37,12</td>
+              <td class="sens-pos">40,12</td>
+              <td class="sens-pos">44,01</td>
+            </tr>
+            <tr>
+              <td>14,5%</td>
+              <td class="sens-neg">29,30</td>
+              <td>30,64</td>
+              <td>32,28</td>
+              <td>34,33</td>
+              <td>36,97</td>
+            </tr>
+            <tr>
+              <td>15,5%</td>
+              <td class="sens-neg">26,38</td>
+              <td class="sens-neg">27,30</td>
+              <td class="sens-neg">28,41</td>
+              <td>29,77</td>
+              <td>31,47</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Perguntas frequentes
+      </div>
+      <h2 class="section-title">Como funciona o calculo?</h2>
+      <p class="section-sub">
+        Entenda a logica por tras do valuation por Fluxo de Caixa Descontado de forma
+        simples e acessivel.
+      </p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          O que e Valuation por Fluxo de Caixa Descontado (DCF)?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          E um metodo de avaliacao de empresas que estima o valor justo de uma acao com base nos resultados
+          que a empresa deve gerar no futuro. A ideia central e simples: <strong>uma empresa vale o
+          que ela e capaz de gerar de caixa ao longo do tempo, trazido a valor de hoje</strong>. E o metodo
+          mais utilizado por analistas profissionais e investidores institucionais no mundo inteiro.
+        </div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          Como funciona a projecao de resultados?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Voce insere os dados historicos dos ultimos 5 anos da empresa (receita, custos, margens, divida, etc.)
+          e define premissas para os proximos 5 anos, como crescimento de receita, margens operacionais e
+          investimentos. O sistema calcula automaticamente toda a DRE, o Balanco Patrimonial e o Fluxo de Caixa
+          projetados, mantendo a consistencia contabil entre eles.
+        </div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          O que significa "trazer a valor presente"?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Um real recebido daqui a 5 anos vale menos do que um real recebido hoje, porque voce poderia
+          investir esse real agora e obter retorno. <strong>Descontar a valor presente</strong> e aplicar uma
+          taxa (o WACC) que reflete esse custo de oportunidade, transformando fluxos futuros em valores
+          equivalentes de hoje. Assim, voce compara o valor presente total da empresa com o preco atual
+          da acao.
+        </div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          Como o sistema chega ao preco-alvo por acao?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Apos projetar os fluxos de caixa futuros e traze-los a valor presente, o sistema soma esse valor
+          ao caixa disponivel e subtrai a divida, chegando ao <strong>Equity Value</strong> (valor que
+          pertence aos acionistas). Esse valor e entao dividido pelo numero de acoes em circulacao,
+          resultando no preco justo por acao. A diferenca entre esse preco e o preco de mercado atual
+          gera o upside ou downside.
+        </div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          O que e Valor Terminal e por que ele e importante?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          A projecao explicita cobre 5 anos, mas a empresa continua existindo depois disso. O
+          Valor Terminal representa o valor de todos os fluxos de caixa apos o periodo de projecao.
+          O SZilean calcula a media entre dois metodos consagrados para maior robustez da avaliacao,
+          garantindo que o resultado final considere tanto multiplos de mercado quanto premissas de
+          crescimento de longo prazo.
+        </div></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">
+          O sistema e realmente gratuito?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          Sim, <strong>100% gratuito</strong>. Sem periodo de teste, sem planos pagos, sem limites de uso.
+          O SZilean existe para elevar o nivel de analise do investidor brasileiro, oferecendo uma
+          ferramenta profissional de valuation acessivel a todos. Basta criar sua conta e comecar.
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA FINAL
+     ============================================================ -->
+<section class="cta-final section-dark">
+  <div class="cta-final-glow"></div>
+  <div class="container reveal">
+    <h2>Eleve o nivel da sua analise.</h2>
+    <p>
+      Junte-se a investidores que tomam decisoes baseadas em projecoes fundamentadas,
+      nao em indicadores do passado. Totalmente gratuito.
+    </p>
+    <a href="https://hiagofelipe.github.io/SZilean/#/login" class="btn-primary" style="font-size:17px;padding:18px 44px">
+      Acesse o sistema
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <div class="footer-brand-icon">SZ</div>
+          <div class="footer-brand-text">S<span>Z</span>ilean</div>
+        </div>
+        <p class="footer-tagline">
+          Software Fundamentalista de Valuation. Projete o futuro, descubra o valor justo.
+        </p>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="footer-link-btn" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          Instagram
+        </a>
+        <a href="mailto:contato@szilean.com" class="footer-link-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Precisa de ajuda?
+        </a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        &copy; 2026 SZilean Software Fundamentalista de Valuation. Todos os direitos reservados.
+      </div>
+      <div class="footer-right">
+        O caminho e sempre o mesmo.
+        <span class="footer-hourglass">
+          <svg viewBox="0 0 16 24" fill="none">
+            <rect x="2" y="0" width="12" height="1.8" rx="0.6" fill="currentColor"/>
+            <rect x="2" y="22.2" width="12" height="1.8" rx="0.6" fill="currentColor"/>
+            <path d="M3.5 1.8 L3.5 7 L8 12 L3.5 17 L3.5 22.2 M12.5 1.8 L12.5 7 L8 12 L12.5 17 L12.5 22.2" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>
+            <polygon class="hg-sand-top" points="5.2,3.5 10.8,3.5 8.3,8.2 7.7,8.2" fill="currentColor"/>
+            <polygon class="hg-sand-bot" points="5.2,20.5 10.8,20.5 8.3,15.8 7.7,15.8" fill="currentColor"/>
+            <circle class="hg-g hg-g1" cx="8" cy="12" r="0.6" fill="currentColor"/>
+            <circle class="hg-g hg-g2" cx="8" cy="12" r="0.6" fill="currentColor"/>
+            <circle class="hg-g hg-g3" cx="8" cy="12" r="0.6" fill="currentColor"/>
+            <circle class="hg-g hg-g4" cx="8" cy="12" r="0.5" fill="currentColor"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function() {
+'use strict';
+
+// ================================================================
+// NAV — scroll shadow + mobile menu
+// ================================================================
+const nav = document.getElementById('nav');
+const hamburger = document.getElementById('navHamburger');
+const navLinks = document.getElementById('navLinks');
+
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  });
+});
+
+// ================================================================
+// REVEAL ON SCROLL
+// ================================================================
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ================================================================
+// FAQ ACCORDION
+// ================================================================
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// ================================================================
+// HERO MINI CHART
+// ================================================================
+(function() {
+  const c = document.getElementById('heroChart');
+  const heights = [35, 42, 38, 50, 58, 52, 60, 68, 75, 82];
+  heights.forEach((h, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'hero-mini-bar' + (i >= 5 ? ' proj' : '');
+    bar.style.height = h + '%';
+    c.appendChild(bar);
+  });
+})();
+
+// ================================================================
+// SVG CHART HELPERS
+// ================================================================
+function smoothPath(pts) {
+  if (!pts || pts.length < 2) return '';
+  let d = 'M ' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 1; i < pts.length; i++) {
+    const [x0, y0] = pts[i - 1];
+    const [x1, y1] = pts[i];
+    const mx = (x0 + x1) / 2;
+    d += ' C ' + mx.toFixed(1) + ',' + y0.toFixed(1) + ' ' + mx.toFixed(1) + ',' + y1.toFixed(1) + ' ' + x1.toFixed(1) + ',' + y1.toFixed(1);
+  }
+  return d;
+}
+
+function chartFmt(v) {
+  if (v == null || !isFinite(v)) return '';
+  const sign = v < 0 ? '-' : '';
+  const abs = Math.abs(v);
+  if (abs >= 1e9) return sign + (abs / 1e9).toFixed(1).replace('.', ',') + 'B';
+  if (abs >= 1e6) return sign + (abs / 1e6).toFixed(0) + 'M';
+  if (abs >= 1e3) return sign + (abs / 1e3).toFixed(0) + 'K';
+  return sign + Math.round(abs);
+}
+
+function pctFmt(v) {
+  if (v == null || !isFinite(v)) return '';
+  return (v * 100).toFixed(1).replace('.', ',') + '%';
+}
+
+function niceRange(min, max) {
+  if (min === max) return { lo: min - 1, hi: max + 1, step: 1 };
+  const range = max - min;
+  const mag = Math.pow(10, Math.floor(Math.log10(range)) - 1);
+  const step = Math.ceil(range / (5 * mag)) * mag;
+  const lo = Math.floor(min / step) * step;
+  const hi = Math.ceil(max / step) * step;
+  return { lo, hi, step };
+}
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs || {})) el.setAttribute(k, v);
+  return el;
+}
+
+// ================================================================
+// DRAW BAR + LINE COMBO (like ComboChart)
+// ================================================================
+function drawCombo(svgId, data, bars, lines, opts) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  svg.innerHTML = '';
+  const W = 640, H = 270;
+  const P = { top: 28, right: 20, bottom: 38, left: 68 };
+  const iW = W - P.left - P.right;
+  const iH = H - P.top - P.bottom;
+  const n = data.length;
+  const colW = iW / n;
+
+  const allVals = data.flatMap(d =>
+    [...bars.map(b => d[b.key]), ...lines.map(l => d[l.key])].filter(v => v != null && isFinite(v))
+  );
+  const rawMin = Math.min(0, ...allVals);
+  const rawMax = Math.max(...allVals);
+  const { lo, hi, step } = niceRange(rawMin, rawMax);
+  const range = hi - lo || 1;
+
+  const sy = v => P.top + (1 - (v - lo) / range) * iH;
+  const sx = i => P.left + (i + 0.5) * colW;
+  const zero = sy(0);
+  const barW = colW * 0.72 / bars.length;
+  const barGap = 4;
+  const splitIdx = opts.splitAt || 5;
+
+  // Grid
+  for (let v = lo; v <= hi + step * 0.01; v += step) {
+    const y = sy(v);
+    svg.appendChild(svgEl('line', { x1: P.left, y1: y, x2: P.left + iW, y2: y, stroke: v === 0 ? 'rgba(100,130,180,0.4)' : 'rgba(100,130,180,0.13)', 'stroke-width': v === 0 ? 1 : 0.7 }));
+    const t = svgEl('text', { x: P.left - 6, y: y + 4, fill: 'rgba(148,183,234,0.7)', 'font-size': 9.5, 'text-anchor': 'end', 'font-family': 'var(--font-mono)' });
+    t.textContent = chartFmt(v);
+    svg.appendChild(t);
+  }
+
+  // Proj separator
+  const splitX = P.left + splitIdx * colW;
+  svg.appendChild(svgEl('line', { x1: splitX, y1: P.top, x2: splitX, y2: P.top + iH, stroke: 'rgba(56,189,248,0.25)', 'stroke-width': 1.5, 'stroke-dasharray': '4,3' }));
+  const projLabel = svgEl('text', { x: splitX + 4, y: P.top + 10, fill: 'rgba(56,189,248,0.5)', 'font-size': 8.5, 'font-family': 'var(--font-sans)', 'font-weight': 600 });
+  projLabel.textContent = 'PROJETADO \u2192';
+  svg.appendChild(projLabel);
+
+  // Bars
+  data.forEach((d, i) => {
+    bars.forEach((b, bi) => {
+      const v = d[b.key];
+      if (v == null || !isFinite(v)) return;
+      const x = P.left + i * colW + barGap / 2 + bi * (barW + 1);
+      const y0 = zero;
+      const y1 = sy(v);
+      const bH = Math.abs(y0 - y1);
+      const bY = Math.min(y0, y1);
+      svg.appendChild(svgEl('rect', { x, y: bY, width: barW, height: bH, fill: b.color, opacity: i < splitIdx ? 0.9 : 0.5, rx: 2 }));
+    });
+  });
+
+  // Lines
+  lines.forEach(l => {
+    const pts = data.map((d, i) => {
+      const v = d[l.key];
+      if (v == null || !isFinite(v)) return null;
+      return [sx(i), sy(v)];
+    }).filter(Boolean);
+    if (pts.length < 2) return;
+    svg.appendChild(svgEl('path', { d: smoothPath(pts), fill: 'none', stroke: l.color, 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
+    pts.forEach(([x, y]) => {
+      svg.appendChild(svgEl('circle', { cx: x, cy: y, r: 3, fill: l.color, stroke: opts.darkBg ? '#0f1c2e' : '#fff', 'stroke-width': 1.5 }));
+    });
+  });
+
+  // X labels
+  data.forEach((d, i) => {
+    const t = svgEl('text', { x: sx(i), y: P.top + iH + 18, fill: 'rgba(148,183,234,0.7)', 'font-size': 9.5, 'text-anchor': 'middle', 'font-family': 'var(--font-mono)', 'font-weight': i === splitIdx - 1 ? 700 : 400 });
+    t.textContent = d.year;
+    svg.appendChild(t);
+  });
+}
+
+// ================================================================
+// DRAW LINE CHART (like LineChart)
+// ================================================================
+function drawLines(svgId, data, lines, opts) {
+  const svg = document.getElementById(svgId);
+  if (!svg) return;
+  svg.innerHTML = '';
+  const W = opts.w || 560, H = opts.h || 230;
+  const P = { top: 28, right: 20, bottom: 38, left: 68 };
+  const iW = W - P.left - P.right;
+  const iH = H - P.top - P.bottom;
+  const n = data.length;
+  const colW = iW / n;
+  const isPct = opts.isPct;
+
+  const allVals = data.flatMap(d => lines.map(l => d[l.key]).filter(v => v != null && isFinite(v)));
+  const rawMin = Math.min(...allVals);
+  const rawMax = Math.max(...allVals);
+  const { lo, hi, step } = niceRange(rawMin, rawMax);
+  const range = hi - lo || 1;
+
+  const sy = v => P.top + (1 - (v - lo) / range) * iH;
+  const sx = i => P.left + (i + 0.5) * colW;
+  const splitIdx = opts.splitAt || 5;
+
+  for (let v = lo; v <= hi + step * 0.01; v += step) {
+    const y = sy(v);
+    svg.appendChild(svgEl('line', { x1: P.left, y1: y, x2: P.left + iW, y2: y, stroke: 'rgba(100,130,180,0.13)', 'stroke-width': 0.7 }));
+    const t = svgEl('text', { x: P.left - 6, y: y + 4, fill: 'rgba(148,183,234,0.65)', 'font-size': 9.5, 'text-anchor': 'end', 'font-family': 'var(--font-mono)' });
+    t.textContent = isPct ? pctFmt(v) : chartFmt(v);
+    svg.appendChild(t);
+  }
+
+  const splitX = P.left + splitIdx * colW;
+  svg.appendChild(svgEl('line', { x1: splitX, y1: P.top, x2: splitX, y2: P.top + iH, stroke: 'rgba(56,189,248,0.22)', 'stroke-width': 1.5, 'stroke-dasharray': '4,3' }));
+
+  lines.forEach(l => {
+    const pts = data.map((d, i) => {
+      const v = d[l.key];
+      if (v == null || !isFinite(v)) return null;
+      return [sx(i), sy(v)];
+    }).filter(Boolean);
+    if (pts.length < 2) return;
+    // area fill
+    if (opts.fillArea) {
+      const bottom = P.top + iH;
+      const areaD = smoothPath(pts) + ' L ' + pts[pts.length - 1][0] + ',' + bottom + ' L ' + pts[0][0] + ',' + bottom + ' Z';
+      svg.appendChild(svgEl('path', { d: areaD, fill: l.color, opacity: 0.08 }));
+    }
+    svg.appendChild(svgEl('path', { d: smoothPath(pts), fill: 'none', stroke: l.color, 'stroke-width': 2, 'stroke-linecap': 'round' }));
+    pts.forEach(([x, y]) => {
+      svg.appendChild(svgEl('circle', { cx: x, cy: y, r: 2.8, fill: l.color, stroke: '#fff', 'stroke-width': 1.2 }));
+    });
+  });
+
+  data.forEach((d, i) => {
+    const t = svgEl('text', { x: sx(i), y: P.top + iH + 18, fill: 'rgba(148,183,234,0.65)', 'font-size': 9.5, 'text-anchor': 'middle', 'font-family': 'var(--font-mono)', 'font-weight': i === splitIdx - 1 ? 700 : 400 });
+    t.textContent = d.year;
+    svg.appendChild(t);
+  });
+}
+
+// ================================================================
+// FICTIONAL DATA — Empresa Exemplo S.A.
+// ================================================================
+const YEARS = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029];
+
+const baseData = {
+  receita:  [1800, 2050, 2280, 2450, 2600, 2860, 3146, 3429, 3704, 3963],
+  lBruto:   [810, 943, 1071, 1176, 1274, 1430, 1604, 1783, 1963, 2139],
+  ebitda:   [468, 554, 639, 710, 780, 886, 1004, 1131, 1259, 1386],
+  lucroLiq: [252, 308, 356, 394, 432, 500, 572, 650, 732, 812],
+  mBruta:   [.45, .46, .47, .48, .49, .50, .51, .52, .53, .54],
+  mEbitda:  [.26, .27, .28, .29, .30, .31, .319, .33, .34, .35],
+  mLiquida: [.14, .15, .156, .161, .166, .175, .182, .19, .198, .205],
+  fcOp:     [320, 380, 420, 460, 510, 580, 660, 740, 820, 900],
+  fcInv:    [-180, -200, -220, -230, -250, -270, -290, -310, -330, -350],
+  fcLivre:  [140, 180, 200, 230, 260, 310, 370, 430, 490, 550],
+};
+
+const scenData = {
+  base: {
+    price: 'R$ 38,42', upside: '+53,7%', upsideLabel: 'Upside', upsideColor: 'var(--positive)',
+    ev: '4,8B', tir: '18,2%',
+    receita: baseData.receita, ebitda: baseData.ebitda,
+  },
+  otimista: {
+    price: 'R$ 52,10', upside: '+108,4%', upsideLabel: 'Upside', upsideColor: 'var(--positive)',
+    ev: '6,2B', tir: '24,6%',
+    receita: [1800, 2050, 2280, 2450, 2600, 3120, 3588, 4074, 4563, 5064],
+    ebitda:  [468, 554, 639, 710, 780, 1030, 1220, 1424, 1644, 1874],
+  },
+  pessimista: {
+    price: 'R$ 21,85', upside: '-12,6%', upsideLabel: 'Downside', upsideColor: 'var(--negative)',
+    ev: '3,1B', tir: '9,4%',
+    receita: [1800, 2050, 2280, 2450, 2600, 2678, 2745, 2800, 2842, 2870],
+    ebitda:  [468, 554, 639, 710, 780, 776, 768, 756, 740, 720],
+  },
+};
+
+// ================================================================
+// DRAW CHARTS — static
+// ================================================================
+function drawStaticCharts() {
+  const years = YEARS;
+  const chartData = years.map((y, i) => ({
+    year: y, receita: baseData.receita[i], lBruto: baseData.lBruto[i],
+  }));
+  drawCombo('chartRevenue', chartData,
+    [{ key: 'receita', color: '#0EA5E9' }, { key: 'lBruto', color: '#38BDF8' }],
+    [],
+    { splitAt: 5 }
+  );
+
+  const marginData = years.map((y, i) => ({
+    year: y, mBruta: baseData.mBruta[i], mEbitda: baseData.mEbitda[i], mLiquida: baseData.mLiquida[i],
+  }));
+  drawLines('chartMargins', marginData,
+    [{ key: 'mBruta', color: '#0EA5E9' }, { key: 'mEbitda', color: '#38BDF8' }, { key: 'mLiquida', color: '#7C3AED' }],
+    { isPct: true, splitAt: 5, fillArea: true }
+  );
+
+  const cfData = years.map((y, i) => ({
+    year: y, fcOp: baseData.fcOp[i], fcInv: baseData.fcInv[i], fcLivre: baseData.fcLivre[i],
+  }));
+  drawCombo('chartCF', cfData,
+    [{ key: 'fcOp', color: '#34D399' }, { key: 'fcInv', color: '#F87171' }],
+    [{ key: 'fcLivre', color: '#FBBF24' }],
+    { splitAt: 5 }
+  );
+}
+
+drawStaticCharts();
+
+// ================================================================
+// SCENARIO INTERACTION
+// ================================================================
+const scenColors = { base: '#38BDF8', otimista: '#34D399', pessimista: '#F87171' };
+
+function drawScenChart(scenId) {
+  const sd = scenData[scenId];
+  const color = scenColors[scenId];
+  const data = YEARS.map((y, i) => ({ year: y, receita: sd.receita[i], ebitda: sd.ebitda[i] }));
+  drawCombo('scenChart', data,
+    [{ key: 'receita', color: color }],
+    [{ key: 'ebitda', color: 'rgba(255,255,255,0.4)' }],
+    { splitAt: 5, darkBg: true }
+  );
+
+  document.getElementById('scenPrice').textContent = sd.price;
+  document.getElementById('scenUpside').textContent = sd.upside;
+  document.getElementById('scenUpsideLabel').textContent = sd.upsideLabel;
+  document.getElementById('scenUpsideLabel').style.color = sd.upsideColor;
+  document.getElementById('scenUpside').style.color = sd.upsideColor;
+  document.getElementById('scenEV').textContent = sd.ev;
+  document.getElementById('scenTIR').textContent = sd.tir;
+
+  // Update legend
+  document.getElementById('scenLegend').innerHTML =
+    '<span class="chart-legend-item"><span class="chart-legend-dot" style="background:' + color + '"></span>Receita</span>' +
+    '<span class="chart-legend-item"><span class="chart-legend-dot" style="background:rgba(255,255,255,0.4)"></span>EBITDA</span>';
+}
+
+// Initial
+drawScenChart('base');
+
+document.getElementById('scenTabs').addEventListener('click', function(e) {
+  const tab = e.target.closest('.scen-tab');
+  if (!tab) return;
+  const scen = tab.dataset.scen;
+  document.querySelectorAll('.scen-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  drawScenChart(scen);
+});
+
+})();
+</script>
+
+</body>
+</html>
