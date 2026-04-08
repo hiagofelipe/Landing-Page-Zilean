@@ -2118,7 +2118,7 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   let intervalId;
   function resetInterval() {
     clearInterval(intervalId);
-    intervalId = setInterval(() => switchTo((current + 1) % companies.length), 7000);
+    intervalId = setInterval(() => switchTo((current + 1) % companies.length), 5000);
   }
   dots.forEach((dot, i) => {
     dot.style.cursor = 'pointer';
