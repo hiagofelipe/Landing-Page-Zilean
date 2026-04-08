@@ -1346,6 +1346,74 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* Selection */
 ::selection { background: rgba(14,165,233,0.2); color: var(--text); }
+.sz-z { color: var(--accent); }
+
+/* ============================================================
+   CHART TOOLTIP
+   ============================================================ */
+.chart-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: rgba(6, 21, 53, 0.96);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 10px;
+  padding: 10px 14px;
+  min-width: 152px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  backdrop-filter: blur(10px);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-2);
+  display: none;
+  transition: opacity 0.12s ease;
+}
+.chart-tooltip.visible { display: block; }
+.ctt-year {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ctt-badge {
+  font-size: 9px;
+  font-weight: 700;
+  background: rgba(56,189,248,0.14);
+  color: var(--accent);
+  border: 1px solid rgba(56,189,248,0.25);
+  border-radius: 4px;
+  padding: 1px 5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ctt-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 0;
+}
+.ctt-row + .ctt-row { border-top: 1px solid rgba(255,255,255,0.05); }
+.ctt-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ctt-label {
+  flex: 1;
+  color: var(--text-3);
+  font-size: 11px;
+}
+.ctt-val {
+  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text);
+}
 
   </style>
 </head>
@@ -1457,7 +1525,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Por que ser diferente
       </div>
-      <h2 class="section-title">A maioria olha para o passado.<br>O SZilean projeta o futuro.</h2>
+      <h2 class="section-title">A maioria olha para o passado.<br>O S<span class="sz-z">Z</span>ilean projeta o futuro.</h2>
       <p class="section-sub">
         Indicadores históricos já são conhecidos pelo mercado e, na maioria das vezes,
         já estão refletidos no preço atual. O verdadeiro diferencial está em projetar
@@ -1519,7 +1587,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         <div class="compare-card-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
-        <h3>A abordagem SZilean</h3>
+        <h3>A abordagem S<span class="sz-z">Z</span>ilean</h3>
         <p>Projete receitas, custos e fluxos de caixa para os próximos 5 anos. Traga tudo a valor presente e descubra o valor justo.</p>
 
         <!-- Seletor de horizonte de projeção -->
@@ -2025,7 +2093,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         <div class="faq-answer"><div class="faq-answer-inner">
           A projeção explícita cobre 5 anos, mas a empresa continua existindo depois disso. O
           Valor Terminal representa o valor de todos os fluxos de caixa após o período de projeção.
-          O SZilean calcula a média entre dois métodos consagrados para maior robustez da avaliação,
+          O S<span class="sz-z">Z</span>ilean calcula a média entre dois métodos consagrados para maior robustez da avaliação,
           garantindo que o resultado final considere tanto múltiplos de mercado quanto premissas de
           crescimento de longo prazo.
         </div></div>
@@ -2037,7 +2105,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         </button>
         <div class="faq-answer"><div class="faq-answer-inner">
           Sim, <strong>100% gratuito</strong>. Sem período de teste, sem planos pagos, sem limites de uso.
-          O SZilean existe para elevar o nível de análise do investidor brasileiro, oferecendo uma
+          O S<span class="sz-z">Z</span>ilean existe para elevar o nível de análise do investidor brasileiro, oferecendo uma
           ferramenta profissional de valuation acessível a todos. Basta criar sua conta e começar.
         </div></div>
       </div>
@@ -2075,7 +2143,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           <div class="footer-brand-text">S<span>Z</span>ilean</div>
         </div>
         <p class="footer-tagline">
-          Software Fundamentalista de Valuation. Projete o futuro, descubra o valor justo.
+          Software Fundamentalista de Valuation.<br>Projete o futuro, descubra o valor justo hoje.
         </p>
       </div>
       <div class="footer-links">
@@ -2092,7 +2160,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <div class="footer-copy">
-        &copy; 2026 SZilean Software Fundamentalista de Valuation. Todos os direitos reservados.
+        &copy; 2026 S<span class="sz-z">Z</span>ilean Software Fundamentalista de Valuation. Todos os direitos reservados.
       </div>
       <div class="footer-right">
         O caminho e sempre o mesmo.
@@ -2191,7 +2259,7 @@ document.querySelectorAll('.faq-question').forEach(btn => {
       badge:     'SZ',
       badgeGrad: 'linear-gradient(135deg, #0369a1, #0EA5E9)',
       name:      'SZLN3',
-      sub:       'SZilean Ativos S.A.',
+      sub:       'S<span class="sz-z">Z</span>ilean Ativos S.A.',
       price:     24.78,
       upside:    31.4,
       upsidePos: true,
@@ -2261,7 +2329,7 @@ document.querySelectorAll('.faq-question').forEach(btn => {
       elBadge.textContent      = next.badge;
       elBadge.style.background = next.badgeGrad;
       elName.textContent       = next.name;
-      elSub.textContent        = next.sub;
+      elSub.innerHTML          = next.sub;
       elUpside.className       = 'hero-metric-val' + (next.upsidePos ? ' pos' : ' neg');
 
       // Reposition text below, with no transition
@@ -2886,6 +2954,145 @@ document.getElementById('scenTabs').addEventListener('click', function(e) {
   tab.classList.add('active');
   animateScenTo(scen);
 });
+
+// ================================================================
+// CHART TOOLTIPS
+// ================================================================
+(function () {
+  const tip = document.createElement('div');
+  tip.id = 'chartTooltip';
+  tip.className = 'chart-tooltip';
+  document.body.appendChild(tip);
+
+  // ── Tooltip positioning ───────────────────────────────────────
+  function showTip(cx, cy, html) {
+    tip.innerHTML = html;
+    tip.classList.add('visible');
+    placeTip(cx, cy);
+  }
+  function placeTip(cx, cy) {
+    tip.style.left = '0px'; tip.style.top = '0px'; // reset for measurement
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let left = cx + 18, top = cy - th / 2;
+    if (left + tw > vw - 12) left = cx - tw - 18;
+    if (top < 10) top = 10;
+    if (top + th > vh - 10) top = vh - th - 10;
+    tip.style.left = left + 'px';
+    tip.style.top  = top  + 'px';
+  }
+  function hideTip() { tip.classList.remove('visible'); }
+
+  // ── Value formatters ──────────────────────────────────────────
+  function tipMoney(v) {
+    const s = v < 0 ? '\u2212' : '';
+    const a = Math.abs(v);
+    if (a >= 1000) return s + 'R$\u00A0' + (a / 1000).toFixed(1).replace('.', ',') + 'B';
+    return s + 'R$\u00A0' + Math.round(a) + 'M';
+  }
+  function tipPct(v) { return (v * 100).toFixed(1).replace('.', ',') + '%'; }
+
+  // ── Hit detection ─────────────────────────────────────────────
+  // Returns index (0-based) of the hovered column, or -1 if outside chart area
+  function hitIndex(svg, viewW, padLeft, colW, n, clientX) {
+    const rect = svg.getBoundingClientRect();
+    const relX = (clientX - rect.left) / rect.width * viewW;
+    if (relX < padLeft || relX > padLeft + colW * n) return -1;
+    return Math.max(0, Math.min(n - 1, Math.floor((relX - padLeft) / colW)));
+  }
+
+  // ── Build tooltip HTML ────────────────────────────────────────
+  function buildHtml(year, splitAt, rows) {
+    const isProj = YEARS.indexOf(year) >= splitAt;
+    let h = '<div class="ctt-year">' + year +
+      (isProj ? ' <span class="ctt-badge">Proj.</span>' : '') + '</div>';
+    rows.forEach(r => {
+      h += '<div class="ctt-row">' +
+        '<span class="ctt-dot" style="background:' + r.color + '"></span>' +
+        '<span class="ctt-label">' + r.label + '</span>' +
+        '<span class="ctt-val">' + r.value + '</span>' +
+        '</div>';
+    });
+    return h;
+  }
+
+  // ── Generic attach ────────────────────────────────────────────
+  function attach(svgId, viewW, padLeft, colW, n, splitAt, getRows) {
+    const svg = document.getElementById(svgId);
+    if (!svg) return;
+    if (svg._tipCleanup) svg._tipCleanup();
+
+    function handle(clientX, clientY) {
+      const idx = hitIndex(svg, viewW, padLeft, colW, n, clientX);
+      if (idx < 0) { hideTip(); return; }
+      showTip(clientX, clientY, buildHtml(YEARS[idx], splitAt, getRows(idx)));
+    }
+
+    const onMove  = e => handle(e.clientX, e.clientY);
+    const onLeave = () => hideTip();
+    const onTouch = e => {
+      if (!e.touches[0]) return;
+      handle(e.touches[0].clientX, e.touches[0].clientY);
+    };
+    const onTouchEnd = () => hideTip();
+
+    svg.style.cursor = 'crosshair';
+    svg.addEventListener('mousemove',  onMove);
+    svg.addEventListener('mouseleave', onLeave);
+    svg.addEventListener('touchstart', onTouch, { passive: true });
+    svg.addEventListener('touchmove',  onTouch, { passive: true });
+    svg.addEventListener('touchend',   onTouchEnd);
+
+    svg._tipCleanup = () => {
+      svg.removeEventListener('mousemove',  onMove);
+      svg.removeEventListener('mouseleave', onLeave);
+      svg.removeEventListener('touchstart', onTouch);
+      svg.removeEventListener('touchmove',  onTouch);
+      svg.removeEventListener('touchend',   onTouchEnd);
+    };
+  }
+
+  // ── Constants shared with charts ─────────────────────────────
+  const N = YEARS.length;
+  const COMBO_VW = 640, LINE_VW = 560;
+  const PAD_L = 68, PAD_R = 20;
+  const comboColW = (COMBO_VW - PAD_L - PAD_R) / N;
+  const lineColW  = (LINE_VW  - PAD_L - PAD_R) / N;
+  const SPLIT = 6; // 2026 is first projected year
+
+  // ── chartRevenue ──────────────────────────────────────────────
+  attach('chartRevenue', COMBO_VW, PAD_L, comboColW, N, SPLIT, idx => [
+    { color: '#0EA5E9', label: 'Receita',     value: tipMoney(baseData.receita[idx]) },
+    { color: '#38BDF8', label: 'Lucro Bruto', value: tipMoney(baseData.lBruto[idx])  },
+    { color: 'rgba(148,183,234,0.6)', label: 'M. Bruta', value: tipPct(baseData.mBruta[idx]) },
+  ]);
+
+  // ── chartMargins ─────────────────────────────────────────────
+  attach('chartMargins', LINE_VW, PAD_L, lineColW, N, SPLIT, idx => [
+    { color: '#0EA5E9', label: 'M. Bruta',   value: tipPct(baseData.mBruta[idx])   },
+    { color: '#38BDF8', label: 'M. EBITDA',  value: tipPct(baseData.mEbitda[idx])  },
+    { color: '#7C3AED', label: 'M. Líquida', value: tipPct(baseData.mLiquida[idx]) },
+  ]);
+
+  // ── chartCF ──────────────────────────────────────────────────
+  attach('chartCF', COMBO_VW, PAD_L, comboColW, N, SPLIT, idx => [
+    { color: '#34D399', label: 'FC Operacional',  value: tipMoney(baseData.fcOp[idx])  },
+    { color: '#F87171', label: 'FC Investimento', value: tipMoney(baseData.fcInv[idx]) },
+    { color: '#FBBF24', label: 'FC Livre',        value: tipMoney(baseData.fcLivre[idx]) },
+  ]);
+
+  // ── scenChart — reads _currentScen at hover time ──────────────
+  attach('scenChart', SCEN_W, SCEN_P.left, SCEN_COLIW, SCEN_N, SCEN_SPLIT, idx => {
+    const sd  = scenData[_currentScen];
+    const col = scenColors[_currentScen];
+    return [
+      { color: col,                        label: 'Receita', value: tipMoney(sd.receita[idx]) },
+      { color: 'rgba(255,255,255,0.55)',   label: 'EBITDA',  value: tipMoney(sd.ebitda[idx])  },
+      { color: 'rgba(148,183,234,0.45)',   label: 'M. EBITDA',
+        value: ((sd.ebitda[idx] / sd.receita[idx]) * 100).toFixed(1).replace('.', ',') + '%' },
+    ];
+  });
+})();
 
 })();
 </script>
