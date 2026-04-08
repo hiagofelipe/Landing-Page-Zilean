@@ -437,6 +437,23 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .hero-mini-bar.proj { opacity: 0.5; }
 
+.hero-mock-dots {
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px;
+  margin-top: 16px;
+}
+.hero-mock-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  transition: background 0.4s ease, transform 0.4s ease;
+  flex-shrink: 0;
+}
+.hero-mock-dot.active {
+  background: var(--accent-300);
+  transform: scale(1.35);
+}
+
 @media (max-width: 960px) {
   .hero-content { grid-template-columns: 1fr; gap: 48px; }
   .hero-left { max-width: 100%; }
@@ -1273,32 +1290,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       <div class="hero-mock">
         <div class="hero-mock-header">
           <div class="hero-mock-ticker">
-            <div class="hero-mock-ticker-badge">EX</div>
+            <div class="hero-mock-ticker-badge" id="heroTickerBadge">EX</div>
             <div>
-              <div class="hero-mock-ticker-name">EXEM3</div>
-              <div class="hero-mock-ticker-sub">Empresa Exemplo S.A.</div>
+              <div class="hero-mock-ticker-name" id="heroTickerName">EXEM3</div>
+              <div class="hero-mock-ticker-sub" id="heroTickerSub">Empresa Exemplo S.A.</div>
             </div>
           </div>
           <div class="hero-mock-price">
             <div class="hero-mock-price-label">Preço-alvo</div>
-            <div class="hero-mock-price-val">R$ 38,42</div>
+            <div class="hero-mock-price-val" id="heroPriceVal">R$ 38,42</div>
           </div>
         </div>
         <div class="hero-mock-metrics">
           <div class="hero-metric">
             <div class="hero-metric-label">Upside</div>
-            <div class="hero-metric-val pos">+53,7%</div>
+            <div class="hero-metric-val pos" id="heroUpside">+53,7%</div>
           </div>
           <div class="hero-metric">
             <div class="hero-metric-label">WACC</div>
-            <div class="hero-metric-val">12,5%</div>
+            <div class="hero-metric-val" id="heroWacc">12,5%</div>
           </div>
           <div class="hero-metric">
             <div class="hero-metric-label">TIR</div>
-            <div class="hero-metric-val">18,2%</div>
+            <div class="hero-metric-val" id="heroTir">18,2%</div>
           </div>
         </div>
         <div class="hero-mini-chart" id="heroChart"></div>
+        <div class="hero-mock-dots" id="heroMockDots">
+          <span class="hero-mock-dot active"></span>
+          <span class="hero-mock-dot"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -1967,17 +1988,131 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 });
 
 // ================================================================
-// HERO MINI CHART
+// HERO MINI CHART & COMPANY SWITCHER
 // ================================================================
 (function() {
-  const c = document.getElementById('heroChart');
-  const heights = [35, 42, 38, 50, 58, 52, 60, 68, 75, 82];
-  heights.forEach((h, i) => {
+  const companies = [
+    {
+      badge:     'EX',
+      badgeGrad: 'linear-gradient(135deg, #7C3AED, #A855F7)',
+      name:      'EXEM3',
+      sub:       'Empresa Exemplo S.A.',
+      price:     38.42,
+      upside:    53.7,
+      upsidePos: true,
+      wacc:      12.5,
+      tir:       18.2,
+      bars:      [35, 42, 38, 50, 58, 52, 60, 68, 75, 82]
+    },
+    {
+      badge:     'SZ',
+      badgeGrad: 'linear-gradient(135deg, #0369a1, #0EA5E9)',
+      name:      'SZLN3',
+      sub:       'SZilean Ativos S.A.',
+      price:     24.78,
+      upside:    31.4,
+      upsidePos: true,
+      wacc:      10.8,
+      tir:       15.6,
+      bars:      [22, 30, 28, 38, 46, 44, 55, 63, 71, 80]
+    }
+  ];
+
+  // Build bars from first company
+  const chartEl = document.getElementById('heroChart');
+  const bars = [];
+  companies[0].bars.forEach((h, i) => {
     const bar = document.createElement('div');
     bar.className = 'hero-mini-bar' + (i >= 5 ? ' proj' : '');
     bar.style.height = h + '%';
-    c.appendChild(bar);
+    chartEl.appendChild(bar);
+    bars.push(bar);
   });
+
+  const elBadge  = document.getElementById('heroTickerBadge');
+  const elName   = document.getElementById('heroTickerName');
+  const elSub    = document.getElementById('heroTickerSub');
+  const elPrice  = document.getElementById('heroPriceVal');
+  const elUpside = document.getElementById('heroUpside');
+  const elWacc   = document.getElementById('heroWacc');
+  const elTir    = document.getElementById('heroTir');
+  const dots     = document.querySelectorAll('#heroMockDots .hero-mock-dot');
+
+  // Formatters
+  const fmt1      = v => v.toFixed(1).replace('.', ',');
+  const fmt2      = v => v.toFixed(2).replace('.', ',');
+  const fmtPrice  = v => 'R$ ' + fmt2(v);
+  const fmtUpside = (v, pos) => (pos ? '+' : '\u2212') + fmt1(Math.abs(v)) + '%';
+  const fmtPct    = v => fmt1(v) + '%';
+
+  // Smooth number counter (ease-out cubic)
+  function animNum(el, from, to, duration, formatter) {
+    const t0 = performance.now();
+    (function step(now) {
+      const prog = Math.min((now - t0) / duration, 1);
+      const ease = 1 - Math.pow(1 - prog, 3);
+      el.textContent = formatter(from + (to - from) * ease);
+      if (prog < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  let current = 0;
+
+  function switchTo(nextIdx) {
+    const prev = companies[current];
+    const next = companies[nextIdx];
+    const textEls = [elBadge, elName, elSub];
+
+    // ── Phase 1: slide text upward and fade out ──
+    textEls.forEach(el => {
+      el.style.transition = 'opacity 0.28s ease, transform 0.28s ease';
+      el.style.opacity    = '0';
+      el.style.transform  = 'translateY(-7px)';
+    });
+
+    setTimeout(() => {
+      // Update static content
+      elBadge.textContent      = next.badge;
+      elBadge.style.background = next.badgeGrad;
+      elName.textContent       = next.name;
+      elSub.textContent        = next.sub;
+      elUpside.className       = 'hero-metric-val' + (next.upsidePos ? ' pos' : ' neg');
+
+      // Reposition text below, with no transition
+      textEls.forEach(el => {
+        el.style.transition = 'none';
+        el.style.opacity    = '0';
+        el.style.transform  = 'translateY(7px)';
+      });
+
+      // Animate bar heights (CSS transition handles the visual)
+      next.bars.forEach((h, i) => { bars[i].style.height = h + '%'; });
+
+      // Update dots indicator
+      dots.forEach((d, i) => d.classList.toggle('active', i === nextIdx));
+
+      // Animate numbers from prev → next
+      animNum(elPrice,  prev.price,  next.price,  780, fmtPrice);
+      animNum(elUpside, prev.upside, next.upside, 780, v => fmtUpside(v, next.upsidePos));
+      animNum(elWacc,   prev.wacc,   next.wacc,   780, fmtPct);
+      animNum(elTir,    prev.tir,    next.tir,    780, fmtPct);
+
+      // ── Phase 2: slide text up into position and fade in ──
+      // Double rAF ensures the browser commits the "no-transition" frame first
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        textEls.forEach(el => {
+          el.style.transition = 'opacity 0.38s ease, transform 0.38s ease';
+          el.style.opacity    = '1';
+          el.style.transform  = 'translateY(0)';
+        });
+      }));
+
+      current = nextIdx;
+    }, 310);
+  }
+
+  // Switch every 7 seconds
+  setInterval(() => switchTo((current + 1) % companies.length), 7000);
 })();
 
 // ================================================================
