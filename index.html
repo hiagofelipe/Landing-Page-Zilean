@@ -2667,36 +2667,217 @@ function drawStaticCharts() {
 drawStaticCharts();
 
 // ================================================================
-// SCENARIO INTERACTION
+// SCENARIO INTERACTION — fully animated
 // ================================================================
 const scenColors = { base: '#38BDF8', otimista: '#34D399', pessimista: '#F87171' };
 
-function drawScenChart(scenId) {
-  const sd = scenData[scenId];
-  const color = scenColors[scenId];
-  const data = YEARS.map((y, i) => ({ year: y, receita: sd.receita[i], ebitda: sd.ebitda[i] }));
-  drawCombo('scenChart', data,
-    [{ key: 'receita', color: color }],
-    [{ key: 'ebitda', color: 'rgba(255,255,255,0.4)' }],
-    { splitAt: 5, darkBg: true }
-  );
+// Numeric values for counter animation
+const scenNum = {
+  base:       { price: 38.42, upside: 53.7,  ev: 4.8, tir: 18.2, upsidePos: true  },
+  otimista:   { price: 52.10, upside: 108.4, ev: 6.2, tir: 24.6, upsidePos: true  },
+  pessimista: { price: 21.85, upside: -12.6, ev: 3.1, tir: 9.4,  upsidePos: false },
+};
 
-  document.getElementById('scenPrice').textContent = sd.price;
-  document.getElementById('scenUpside').textContent = sd.upside;
-  document.getElementById('scenUpsideLabel').textContent = sd.upsideLabel;
-  document.getElementById('scenUpsideLabel').style.color = sd.upsideColor;
-  document.getElementById('scenUpside').style.color = sd.upsideColor;
-  document.getElementById('scenEV').textContent = sd.ev;
-  document.getElementById('scenTIR').textContent = sd.tir;
+// ── Chart constants (shared scale across all scenarios) ──────────
+const SCEN_W = 640, SCEN_H = 270;
+const SCEN_P = { top: 28, right: 20, bottom: 38, left: 68 };
+const SCEN_IW = SCEN_W - SCEN_P.left - SCEN_P.right;
+const SCEN_IH = SCEN_H - SCEN_P.top - SCEN_P.bottom;
+const SCEN_N = 10, SCEN_COLIW = SCEN_IW / SCEN_N, SCEN_SPLIT = 5;
+const SCEN_BARW = SCEN_COLIW * 0.72, SCEN_BARGAP = 4;
 
-  // Update legend
+// Global scale: union of all scenarios so axes never jump
+(function() {
+  const allV = [
+    ...scenData.base.receita, ...scenData.otimista.receita, ...scenData.pessimista.receita,
+    ...scenData.base.ebitda,  ...scenData.otimista.ebitda,  ...scenData.pessimista.ebitda,
+  ];
+  const { lo, hi, step } = niceRange(0, Math.max(...allV));
+  window._scenScale = { lo, hi, step, range: hi - lo || 1 };
+})();
+const scenSy = v => SCEN_P.top + (1 - (v - window._scenScale.lo) / window._scenScale.range) * SCEN_IH;
+const scenSx = i => SCEN_P.left + (i + 0.5) * SCEN_COLIW;
+const scenZero = scenSy(0);
+
+// ── Color interpolation ───────────────────────────────────────────
+function hexToRgbArr(h) {
+  const v = parseInt(h.replace('#',''), 16);
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+}
+function lerpHex(a, b, t) {
+  const ra = hexToRgbArr(a), rb = hexToRgbArr(b);
+  return 'rgb(' +
+    Math.round(ra[0]+(rb[0]-ra[0])*t) + ',' +
+    Math.round(ra[1]+(rb[1]-ra[1])*t) + ',' +
+    Math.round(ra[2]+(rb[2]-ra[2])*t) + ')';
+}
+
+// ── Easing ────────────────────────────────────────────────────────
+function scenEase(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+// ── animNum (ease-out cubic) ──────────────────────────────────────
+function scenAnimNum(el, from, to, dur, fmt) {
+  const t0 = performance.now();
+  (function step(now) {
+    const p = Math.min((now - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(from + (to - from) * e);
+    if (p < 1) requestAnimationFrame(step);
+  })(performance.now());
+}
+
+// ── Persistent SVG elements ───────────────────────────────────────
+let _scenBarRects = [], _scenLineCircles = [], _scenLinePath = null;
+let _scenLegendDot = null;
+let _currentScen = 'base';
+let _scenAnimRaf = null;
+
+function initScenChart() {
+  const svg = document.getElementById('scenChart');
+  svg.innerHTML = '';
+  const { lo, hi, step } = window._scenScale;
+
+  // Grid lines + Y labels
+  for (let v = lo; v <= hi + step * 0.01; v += step) {
+    const y = scenSy(v);
+    svg.appendChild(svgEl('line', {
+      x1: SCEN_P.left, y1: y, x2: SCEN_P.left + SCEN_IW, y2: y,
+      stroke: v === 0 ? 'rgba(100,130,180,0.4)' : 'rgba(100,130,180,0.13)',
+      'stroke-width': v === 0 ? 1 : 0.7,
+    }));
+    const t = svgEl('text', { x: SCEN_P.left - 6, y: y + 4, fill: 'rgba(148,183,234,0.7)', 'font-size': 9.5, 'text-anchor': 'end', 'font-family': 'var(--font-mono)' });
+    t.textContent = chartFmt(v);
+    svg.appendChild(t);
+  }
+
+  // Projection separator + label
+  const splitX = SCEN_P.left + SCEN_SPLIT * SCEN_COLIW;
+  svg.appendChild(svgEl('line', { x1: splitX, y1: SCEN_P.top, x2: splitX, y2: SCEN_P.top + SCEN_IH, stroke: 'rgba(56,189,248,0.25)', 'stroke-width': 1.5, 'stroke-dasharray': '4,3' }));
+  const projL = svgEl('text', { x: splitX + 4, y: SCEN_P.top + 10, fill: 'rgba(56,189,248,0.5)', 'font-size': 8.5, 'font-family': 'var(--font-sans)', 'font-weight': 600 });
+  projL.textContent = 'PROJETADO \u2192';
+  svg.appendChild(projL);
+
+  // X labels
+  YEARS.forEach((yr, i) => {
+    const t = svgEl('text', { x: scenSx(i), y: SCEN_P.top + SCEN_IH + 18, fill: 'rgba(148,183,234,0.7)', 'font-size': 9.5, 'text-anchor': 'middle', 'font-family': 'var(--font-mono)', 'font-weight': i === SCEN_SPLIT - 1 ? 700 : 400 });
+    t.textContent = yr;
+    svg.appendChild(t);
+  });
+
+  // Bars
+  const sd = scenData[_currentScen];
+  const col = scenColors[_currentScen];
+  _scenBarRects = [];
+  for (let i = 0; i < SCEN_N; i++) {
+    const v = sd.receita[i];
+    const x = SCEN_P.left + i * SCEN_COLIW + SCEN_BARGAP / 2;
+    const y1 = scenSy(v), bH = Math.abs(scenZero - y1), bY = Math.min(scenZero, y1);
+    const rect = svgEl('rect', { x, y: bY.toFixed(1), width: SCEN_BARW, height: bH.toFixed(1), fill: col, opacity: i < SCEN_SPLIT ? 0.9 : 0.5, rx: 2 });
+    svg.appendChild(rect);
+    _scenBarRects.push(rect);
+  }
+
+  // EBITDA line + circles (drawn above bars)
+  const EBITDA_COL = 'rgba(255,255,255,0.4)';
+  _scenLinePath = svgEl('path', { d: '', fill: 'none', stroke: EBITDA_COL, 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+  svg.appendChild(_scenLinePath);
+  _scenLineCircles = [];
+  for (let i = 0; i < SCEN_N; i++) {
+    const c = svgEl('circle', { cx: scenSx(i), cy: scenSy(sd.ebitda[i]).toFixed(1), r: 3, fill: EBITDA_COL, stroke: '#0f1c2e', 'stroke-width': 1.5 });
+    svg.appendChild(c);
+    _scenLineCircles.push(c);
+  }
+  _scenLinePath.setAttribute('d', smoothPath(sd.ebitda.map((v, i) => [scenSx(i), scenSy(v)])));
+
+  // Legend dot ref
+  _updateScenLegend(col);
+}
+
+function _updateScenLegend(color) {
   document.getElementById('scenLegend').innerHTML =
     '<span class="chart-legend-item"><span class="chart-legend-dot" style="background:' + color + '"></span>Receita</span>' +
     '<span class="chart-legend-item"><span class="chart-legend-dot" style="background:rgba(255,255,255,0.4)"></span>EBITDA</span>';
 }
 
-// Initial
-drawScenChart('base');
+function animateScenTo(newScenId) {
+  if (newScenId === _currentScen) return;
+
+  const fromScen = _currentScen;
+  _currentScen = newScenId;
+
+  const fromSd  = scenData[fromScen],  toSd  = scenData[newScenId];
+  const fromCol = scenColors[fromScen], toCol = scenColors[newScenId];
+  const fromNum = scenNum[fromScen],    toNum = scenNum[newScenId];
+
+  const DUR = 680;
+
+  // ── Counter animations ─────────────────────────────────────────
+  scenAnimNum(document.getElementById('scenPrice'), fromNum.price, toNum.price, DUR,
+    v => 'R$\u00A0' + v.toFixed(2).replace('.', ','));
+
+  const upsideEl = document.getElementById('scenUpside');
+  const upsideLblEl = document.getElementById('scenUpsideLabel');
+  // Flip color & label at the midpoint (value crosses zero there visually)
+  const midDelay = (fromNum.upsidePos !== toNum.upsidePos) ? DUR * 0.5 : 0;
+  setTimeout(() => {
+    const c = toNum.upsidePos ? 'var(--positive)' : 'var(--negative)';
+    upsideEl.style.color = c;
+    upsideLblEl.style.color = c;
+    upsideLblEl.textContent = toNum.upsidePos ? 'Upside' : 'Downside';
+  }, midDelay);
+  scenAnimNum(upsideEl, fromNum.upside, toNum.upside, DUR,
+    v => (v >= 0 ? '+' : '') + v.toFixed(1).replace('.', ',') + '%');
+
+  scenAnimNum(document.getElementById('scenEV'), fromNum.ev, toNum.ev, DUR,
+    v => v.toFixed(1).replace('.', ',') + 'B');
+
+  scenAnimNum(document.getElementById('scenTIR'), fromNum.tir, toNum.tir, DUR,
+    v => v.toFixed(1).replace('.', ',') + '%');
+
+  // ── Chart animation ────────────────────────────────────────────
+  if (_scenAnimRaf) cancelAnimationFrame(_scenAnimRaf);
+
+  const startT = performance.now();
+  const CDUR = 750;
+
+  function frame(now) {
+    const rawT = Math.min((now - startT) / CDUR, 1);
+    const t = scenEase(rawT);
+    const barColor = lerpHex(fromCol, toCol, t);
+
+    for (let i = 0; i < SCEN_N; i++) {
+      // Bars
+      const v = fromSd.receita[i] + (toSd.receita[i] - fromSd.receita[i]) * t;
+      const y1 = scenSy(v), bH = Math.abs(scenZero - y1), bY = Math.min(scenZero, y1);
+      _scenBarRects[i].setAttribute('y', bY.toFixed(1));
+      _scenBarRects[i].setAttribute('height', bH.toFixed(1));
+      _scenBarRects[i].setAttribute('fill', barColor);
+
+      // EBITDA circles
+      const ev = fromSd.ebitda[i] + (toSd.ebitda[i] - fromSd.ebitda[i]) * t;
+      _scenLineCircles[i].setAttribute('cy', scenSy(ev).toFixed(1));
+    }
+
+    // EBITDA line path
+    const pts = _scenLineCircles.map((c, i) => [scenSx(i), parseFloat(c.getAttribute('cy'))]);
+    _scenLinePath.setAttribute('d', smoothPath(pts));
+
+    // Legend dot color (live update)
+    _updateScenLegend(barColor);
+
+    if (rawT < 1) {
+      _scenAnimRaf = requestAnimationFrame(frame);
+    } else {
+      _scenAnimRaf = null;
+      _updateScenLegend(toCol); // Snap to exact color at end
+    }
+  }
+
+  _scenAnimRaf = requestAnimationFrame(frame);
+}
+
+// Initial render
+initScenChart();
 
 document.getElementById('scenTabs').addEventListener('click', function(e) {
   const tab = e.target.closest('.scen-tab');
@@ -2704,7 +2885,7 @@ document.getElementById('scenTabs').addEventListener('click', function(e) {
   const scen = tab.dataset.scen;
   document.querySelectorAll('.scen-tab').forEach(t => t.classList.remove('active'));
   tab.classList.add('active');
-  drawScenChart(scen);
+  animateScenTo(scen);
 });
 
 })();
