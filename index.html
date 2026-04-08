@@ -1484,7 +1484,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           <div class="old-ind"><div class="old-ind-label">ROIC</div><div class="old-ind-val">13,21%</div></div>
           <div class="old-ind"><div class="old-ind-label">M.Bruta</div><div class="old-ind-val">47,63%</div></div>
           <div class="old-ind"><div class="old-ind-label">M.Ebit</div><div class="old-ind-val">29,27%</div></div>
-          <div class="old-ind"><div class="old-ind-label">EV/EBITDA</div><div class="old-ind-val">4,11</div></div>
+          <div class="old-ind"><div class="old-ind-label">P/VP</div><div class="old-ind-val">1,40</div></div>
           <div class="old-ind"><div class="old-ind-label">P/L</div><div class="old-ind-val">5,30</div></div>
         </div>
         <ul class="compare-card-items">
@@ -1563,9 +1563,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
             <div class="new-ind-delta pos" id="projMEbitDelta">+8,8 p.p.</div>
           </div>
           <div class="new-ind">
-            <div class="new-ind-label">EV/EBITDA</div>
-            <div class="new-ind-val" id="projEvEbitda">2,71</div>
-            <div class="new-ind-delta blue" id="projEvEbitdaDelta">−1,40×</div>
+            <div class="new-ind-label">P/VP</div>
+            <div class="new-ind-val" id="projPVP">0,96</div>
+            <div class="new-ind-delta blue" id="projPVPDelta">−0,44×</div>
           </div>
           <div class="new-ind">
             <div class="new-ind-label">P/L</div>
@@ -2319,15 +2319,15 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 // ================================================================
 (function() {
   // Valores base (hoje)
-  const base = { roe: 26.49, roic: 13.21, mBruta: 47.63, mEbit: 29.27, evEbitda: 4.11, pl: 5.30 };
+  const base = { roe: 26.49, roic: 13.21, mBruta: 47.63, mEbit: 29.27, pvp: 1.40, pl: 5.30 };
 
   // Projeções para anos 1–5
   const proj = [
-    { roe: 28.5,  roic: 14.8, mBruta: 49.1, mEbit: 31.2, evEbitda: 3.82, pl: 4.81 },
-    { roe: 30.8,  roic: 16.2, mBruta: 51.0, mEbit: 33.1, evEbitda: 3.52, pl: 4.43 },
-    { roe: 32.4,  roic: 17.9, mBruta: 52.3, mEbit: 34.6, evEbitda: 3.21, pl: 4.09 },
-    { roe: 34.1,  roic: 19.4, mBruta: 53.8, mEbit: 36.2, evEbitda: 2.94, pl: 3.81 },
-    { roe: 36.2,  roic: 21.0, mBruta: 55.4, mEbit: 38.1, evEbitda: 2.71, pl: 3.56 },
+    { roe: 28.5,  roic: 14.8, mBruta: 49.1, mEbit: 31.2, pvp: 1.28, pl: 4.81 },
+    { roe: 30.8,  roic: 16.2, mBruta: 51.0, mEbit: 33.1, pvp: 1.18, pl: 4.43 },
+    { roe: 32.4,  roic: 17.9, mBruta: 52.3, mEbit: 34.6, pvp: 1.09, pl: 4.09 },
+    { roe: 34.1,  roic: 19.4, mBruta: 53.8, mEbit: 36.2, pvp: 1.02, pl: 3.81 },
+    { roe: 36.2,  roic: 21.0, mBruta: 55.4, mEbit: 38.1, pvp: 0.96, pl: 3.56 },
   ];
 
   const yearLabels = ['daqui a 1 ano', 'daqui a 2 anos', 'daqui a 3 anos', 'daqui a 4 anos', 'daqui a 5 anos'];
@@ -2338,14 +2338,14 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   const elRoic       = document.getElementById('projRoic');
   const elMBruta     = document.getElementById('projMBruta');
   const elMEbit      = document.getElementById('projMEbit');
-  const elEvEbitda   = document.getElementById('projEvEbitda');
+  const elPVP        = document.getElementById('projPVP');
   const elPL         = document.getElementById('projPL');
   const elRoeDelta   = document.getElementById('projRoeDelta');
   const elRoicDelta  = document.getElementById('projRoicDelta');
-  const elMBrutaDelta    = document.getElementById('projMBrutaDelta');
-  const elMEbitDelta     = document.getElementById('projMEbitDelta');
-  const elEvEbitdaDelta  = document.getElementById('projEvEbitdaDelta');
-  const elPLDelta        = document.getElementById('projPLDelta');
+  const elMBrutaDelta = document.getElementById('projMBrutaDelta');
+  const elMEbitDelta  = document.getElementById('projMEbitDelta');
+  const elPVPDelta    = document.getElementById('projPVPDelta');
+  const elPLDelta     = document.getElementById('projPLDelta');
 
   // Formatadores
   const fmt1       = v => v.toFixed(1).replace('.', ',');
@@ -2378,24 +2378,24 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     elYearLabel.textContent = yearLabels[idx];
 
     // Deltas vs. base (hoje)
-    const pDelta = { roe: prev.roe - base.roe, roic: prev.roic - base.roic, mBruta: prev.mBruta - base.mBruta, mEbit: prev.mEbit - base.mEbit, evEbitda: prev.evEbitda - base.evEbitda, pl: prev.pl - base.pl };
-    const nDelta = { roe: next.roe - base.roe, roic: next.roic - base.roic, mBruta: next.mBruta - base.mBruta, mEbit: next.mEbit - base.mEbit, evEbitda: next.evEbitda - base.evEbitda, pl: next.pl - base.pl };
+    const pDelta = { roe: prev.roe - base.roe, roic: prev.roic - base.roic, mBruta: prev.mBruta - base.mBruta, mEbit: prev.mEbit - base.mEbit, pvp: prev.pvp - base.pvp, pl: prev.pl - base.pl };
+    const nDelta = { roe: next.roe - base.roe, roic: next.roic - base.roic, mBruta: next.mBruta - base.mBruta, mEbit: next.mEbit - base.mEbit, pvp: next.pvp - base.pvp, pl: next.pl - base.pl };
 
     // Anima valores projetados
-    animNum(elRoe,      prev.roe,      next.roe,      DUR, fmtPct);
-    animNum(elRoic,     prev.roic,     next.roic,     DUR, fmtPct);
-    animNum(elMBruta,   prev.mBruta,   next.mBruta,   DUR, fmtPct);
-    animNum(elMEbit,    prev.mEbit,    next.mEbit,    DUR, fmtPct);
-    animNum(elEvEbitda, prev.evEbitda, next.evEbitda, DUR, fmtMul);
-    animNum(elPL,       prev.pl,       next.pl,       DUR, fmtMul);
+    animNum(elRoe,    prev.roe,    next.roe,    DUR, fmtPct);
+    animNum(elRoic,   prev.roic,   next.roic,   DUR, fmtPct);
+    animNum(elMBruta, prev.mBruta, next.mBruta, DUR, fmtPct);
+    animNum(elMEbit,  prev.mEbit,  next.mEbit,  DUR, fmtPct);
+    animNum(elPVP,    prev.pvp,    next.pvp,    DUR, fmtMul);
+    animNum(elPL,     prev.pl,     next.pl,     DUR, fmtMul);
 
     // Anima deltas
-    animNum(elRoeDelta,       pDelta.roe,      nDelta.roe,      DUR, fmtDeltaPP);
-    animNum(elRoicDelta,      pDelta.roic,     nDelta.roic,     DUR, fmtDeltaPP);
-    animNum(elMBrutaDelta,    pDelta.mBruta,   nDelta.mBruta,   DUR, fmtDeltaPP);
-    animNum(elMEbitDelta,     pDelta.mEbit,    nDelta.mEbit,    DUR, fmtDeltaPP);
-    animNum(elEvEbitdaDelta,  pDelta.evEbitda, nDelta.evEbitda, DUR, fmtDeltaMul);
-    animNum(elPLDelta,        pDelta.pl,       nDelta.pl,       DUR, fmtDeltaMul);
+    animNum(elRoeDelta,   pDelta.roe,    nDelta.roe,    DUR, fmtDeltaPP);
+    animNum(elRoicDelta,  pDelta.roic,   nDelta.roic,   DUR, fmtDeltaPP);
+    animNum(elMBrutaDelta, pDelta.mBruta, nDelta.mBruta, DUR, fmtDeltaPP);
+    animNum(elMEbitDelta,  pDelta.mEbit,  nDelta.mEbit,  DUR, fmtDeltaPP);
+    animNum(elPVPDelta,   pDelta.pvp,    nDelta.pvp,    DUR, fmtDeltaMul);
+    animNum(elPLDelta,    pDelta.pl,     nDelta.pl,     DUR, fmtDeltaMul);
 
     current = idx;
   }
