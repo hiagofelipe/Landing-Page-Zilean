@@ -576,7 +576,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* Indicadores grid (mockup da imagem) */
 .old-indicators {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-bottom: 24px;
 }
@@ -721,7 +721,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin-top: 3px;
 }
 .new-ind-delta.pos  { color: var(--positive); }
-.new-ind-delta.blue { color: var(--accent); }
+.new-ind-delta.blue { color: var(--negative); }
 .compare-card--new p { margin-bottom: 16px; }
 
 @media (max-width: 480px) {
@@ -1480,14 +1480,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           </span>
         </div>
         <div class="old-indicators">
-          <div class="old-ind"><div class="old-ind-label">P/L <svg class="old-ind-q" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">?</text></svg></div><div class="old-ind-val">5,30</div></div>
-          <div class="old-ind"><div class="old-ind-label">P/VP</div><div class="old-ind-val">1,40</div></div>
           <div class="old-ind"><div class="old-ind-label">ROE</div><div class="old-ind-val">26,49%</div></div>
           <div class="old-ind"><div class="old-ind-label">ROIC</div><div class="old-ind-val">13,21%</div></div>
-          <div class="old-ind"><div class="old-ind-label">D.Y.</div><div class="old-ind-val">6,67%</div></div>
           <div class="old-ind"><div class="old-ind-label">M.Bruta</div><div class="old-ind-val">47,63%</div></div>
           <div class="old-ind"><div class="old-ind-label">M.Ebit</div><div class="old-ind-val">29,27%</div></div>
           <div class="old-ind"><div class="old-ind-label">EV/EBITDA</div><div class="old-ind-val">4,11</div></div>
+          <div class="old-ind"><div class="old-ind-label">P/L</div><div class="old-ind-val">5,30</div></div>
         </div>
         <ul class="compare-card-items">
           <li>
@@ -1501,6 +1499,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           <li>
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
             Não oferece vantagem analítica real na tomada de decisão
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Nenhuma métrica do passado garante que o desempenho se repetirá no futuro
           </li>
         </ul>
       </div>
