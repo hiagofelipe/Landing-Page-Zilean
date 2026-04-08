@@ -2038,6 +2038,9 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   const elTir    = document.getElementById('heroTir');
   const dots     = document.querySelectorAll('#heroMockDots .hero-mock-dot');
 
+  // Apply first company's badge gradient immediately (overrides CSS default)
+  elBadge.style.background = companies[0].badgeGrad;
+
   // Formatters
   const fmt1      = v => v.toFixed(1).replace('.', ',');
   const fmt2      = v => v.toFixed(2).replace('.', ',');
@@ -2111,8 +2114,21 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     }, 310);
   }
 
-  // Switch every 7 seconds
-  setInterval(() => switchTo((current + 1) % companies.length), 7000);
+  // Dots: clickable navigation
+  let intervalId;
+  function resetInterval() {
+    clearInterval(intervalId);
+    intervalId = setInterval(() => switchTo((current + 1) % companies.length), 7000);
+  }
+  dots.forEach((dot, i) => {
+    dot.style.cursor = 'pointer';
+    dot.addEventListener('click', () => {
+      if (i !== current) { switchTo(i); resetInterval(); }
+    });
+  });
+
+  // Auto-switch every 7 seconds
+  resetInterval();
 })();
 
 // ================================================================
