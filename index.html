@@ -2478,7 +2478,7 @@ function drawCombo(svgId, data, bars, lines, opts) {
   const zero = sy(0);
   const barW = colW * 0.72 / bars.length;
   const barGap = 4;
-  const splitIdx = opts.splitAt || 5;
+  const splitIdx = opts.splitAt || 6;
 
   // Grid
   for (let v = lo; v <= hi + step * 0.01; v += step) {
@@ -2555,7 +2555,7 @@ function drawLines(svgId, data, lines, opts) {
 
   const sy = v => P.top + (1 - (v - lo) / range) * iH;
   const sx = i => P.left + (i + 0.5) * colW;
-  const splitIdx = opts.splitAt || 5;
+  const splitIdx = opts.splitAt || 6;
 
   for (let v = lo; v <= hi + step * 0.01; v += step) {
     const y = sy(v);
@@ -2621,14 +2621,14 @@ const scenData = {
   otimista: {
     price: 'R$ 52,10', upside: '+108,4%', upsideLabel: 'Upside', upsideColor: 'var(--positive)',
     ev: '6,2B', tir: '24,6%',
-    receita: [1800, 2050, 2280, 2450, 2600, 3120, 3588, 4074, 4563, 5064],
-    ebitda:  [468, 554, 639, 710, 780, 1030, 1220, 1424, 1644, 1874],
+    receita: [1800, 2050, 2280, 2450, 2600, 2860, 3588, 4074, 4563, 5064],
+    ebitda:  [468, 554, 639, 710, 780, 886, 1220, 1424, 1644, 1874],
   },
   pessimista: {
     price: 'R$ 21,85', upside: '-12,6%', upsideLabel: 'Downside', upsideColor: 'var(--negative)',
     ev: '3,1B', tir: '9,4%',
-    receita: [1800, 2050, 2280, 2450, 2600, 2678, 2745, 2800, 2842, 2870],
-    ebitda:  [468, 554, 639, 710, 780, 776, 768, 756, 740, 720],
+    receita: [1800, 2050, 2280, 2450, 2600, 2860, 2745, 2800, 2842, 2870],
+    ebitda:  [468, 554, 639, 710, 780, 886, 768, 756, 740, 720],
   },
 };
 
@@ -2643,7 +2643,7 @@ function drawStaticCharts() {
   drawCombo('chartRevenue', chartData,
     [{ key: 'receita', color: '#0EA5E9' }, { key: 'lBruto', color: '#38BDF8' }],
     [],
-    { splitAt: 5 }
+    { splitAt: 6 }
   );
 
   const marginData = years.map((y, i) => ({
@@ -2651,7 +2651,7 @@ function drawStaticCharts() {
   }));
   drawLines('chartMargins', marginData,
     [{ key: 'mBruta', color: '#0EA5E9' }, { key: 'mEbitda', color: '#38BDF8' }, { key: 'mLiquida', color: '#7C3AED' }],
-    { isPct: true, splitAt: 5, fillArea: true }
+    { isPct: true, splitAt: 6, fillArea: true }
   );
 
   const cfData = years.map((y, i) => ({
@@ -2660,7 +2660,7 @@ function drawStaticCharts() {
   drawCombo('chartCF', cfData,
     [{ key: 'fcOp', color: '#34D399' }, { key: 'fcInv', color: '#F87171' }],
     [{ key: 'fcLivre', color: '#FBBF24' }],
-    { splitAt: 5 }
+    { splitAt: 6 }
   );
 }
 
@@ -2683,7 +2683,7 @@ const SCEN_W = 640, SCEN_H = 270;
 const SCEN_P = { top: 28, right: 20, bottom: 38, left: 68 };
 const SCEN_IW = SCEN_W - SCEN_P.left - SCEN_P.right;
 const SCEN_IH = SCEN_H - SCEN_P.top - SCEN_P.bottom;
-const SCEN_N = 10, SCEN_COLIW = SCEN_IW / SCEN_N, SCEN_SPLIT = 5;
+const SCEN_N = 10, SCEN_COLIW = SCEN_IW / SCEN_N, SCEN_SPLIT = 6;
 const SCEN_BARW = SCEN_COLIW * 0.72, SCEN_BARGAP = 4;
 
 // Global scale: union of all scenarios so axes never jump
