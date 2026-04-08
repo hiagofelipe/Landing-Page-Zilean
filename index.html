@@ -1690,8 +1690,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       </div>
       <div class="scen-metric-card">
         <div class="scen-metric-label">Upside / Downside</div>
-        <div class="scen-metric-value" id="scenUpside">+53,7%</div>
-        <div class="scen-metric-sub" id="scenUpsideLabel" style="color:var(--positive)">Upside</div>
+        <div class="scen-metric-value" id="scenUpside" style="color:var(--scen-blue)">+53,7%</div>
+        <div class="scen-metric-sub" id="scenUpsideLabel" style="color:var(--scen-blue)">Upside</div>
       </div>
       <div class="scen-metric-card">
         <div class="scen-metric-label">Enterprise Value</div>
@@ -2673,9 +2673,9 @@ const scenColors = { base: '#38BDF8', otimista: '#34D399', pessimista: '#F87171'
 
 // Numeric values for counter animation
 const scenNum = {
-  base:       { price: 38.42, upside: 53.7,  ev: 4.8, tir: 18.2, upsidePos: true  },
-  otimista:   { price: 52.10, upside: 108.4, ev: 6.2, tir: 24.6, upsidePos: true  },
-  pessimista: { price: 21.85, upside: -12.6, ev: 3.1, tir: 9.4,  upsidePos: false },
+  base:       { price: 38.42, upside: 53.7,  ev: 4.8, tir: 18.2, upsidePos: true,  upsideColor: 'var(--scen-blue)'  },
+  otimista:   { price: 52.10, upside: 108.4, ev: 6.2, tir: 24.6, upsidePos: true,  upsideColor: 'var(--positive)'   },
+  pessimista: { price: 21.85, upside: -12.6, ev: 3.1, tir: 9.4,  upsidePos: false, upsideColor: 'var(--negative)'   },
 };
 
 // ── Chart constants (shared scale across all scenarios) ──────────
@@ -2818,11 +2818,10 @@ function animateScenTo(newScenId) {
   const upsideEl = document.getElementById('scenUpside');
   const upsideLblEl = document.getElementById('scenUpsideLabel');
   // Flip color & label at the midpoint (value crosses zero there visually)
-  const midDelay = (fromNum.upsidePos !== toNum.upsidePos) ? DUR * 0.5 : 0;
+  const midDelay = (fromNum.upsideColor !== toNum.upsideColor) ? DUR * 0.5 : 0;
   setTimeout(() => {
-    const c = toNum.upsidePos ? 'var(--positive)' : 'var(--negative)';
-    upsideEl.style.color = c;
-    upsideLblEl.style.color = c;
+    upsideEl.style.color = toNum.upsideColor;
+    upsideLblEl.style.color = toNum.upsideColor;
     upsideLblEl.textContent = toNum.upsidePos ? 'Upside' : 'Downside';
   }, midDelay);
   scenAnimNum(upsideEl, fromNum.upside, toNum.upside, DUR,
