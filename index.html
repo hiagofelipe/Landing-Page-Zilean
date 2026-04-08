@@ -606,6 +606,128 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   opacity: 0.5;
 }
 
+/* ── Abordagem tradicional — badge "Dados de hoje" ── */
+.old-ind-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.old-ind-today-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 7px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.old-ind-today-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+/* ── Abordagem SZilean — seletor de ano ── */
+.proj-year-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.proj-year-tab {
+  padding: 5px 13px;
+  border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  color: var(--text-3);
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.proj-year-tab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.proj-year-tab.active {
+  background: rgba(14,165,233,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Abordagem SZilean — header e grid projetados ── */
+.new-ind-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.new-ind-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 7px;
+  background: rgba(14,165,233,0.08);
+  border: 1px solid rgba(14,165,233,0.22);
+  border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.new-ind-badge-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.new-ind-year-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--text-3);
+  transition: opacity 0.3s ease;
+}
+.new-indicators {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.new-ind {
+  background: linear-gradient(135deg, rgba(14,165,233,0.05), rgba(56,189,248,0.03));
+  border: 1px solid rgba(14,165,233,0.16);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: border-color 0.3s ease;
+}
+.new-ind-label {
+  font-size: 10px; font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.new-ind-val {
+  font-family: var(--font-mono);
+  font-weight: 700; font-size: 15px;
+  color: var(--text);
+}
+.new-ind-delta {
+  font-size: 10px; font-weight: 700;
+  font-family: var(--font-mono);
+  margin-top: 3px;
+}
+.new-ind-delta.pos  { color: var(--positive); }
+.new-ind-delta.blue { color: var(--accent); }
+.compare-card--new p { margin-bottom: 16px; }
+
+@media (max-width: 480px) {
+  .new-indicators { grid-template-columns: repeat(2, 1fr); }
+}
+
 .compare-arrow {
   display: flex; align-items: center; justify-content: center;
   align-self: center;
@@ -1350,7 +1472,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
         </div>
         <h3>Abordagem tradicional</h3>
-        <p>Sistemas convencionais exibem indicadores que refletem o que já aconteceu. O mercado já precifica essas informações.</p>
+        <p>Sistemas convencionais exibem indicadores que refletem o que já aconteceu. O mercado já precificou essas informações.</p>
+        <div class="old-ind-header">
+          <span class="old-ind-today-badge">
+            <span class="old-ind-today-dot"></span>
+            Dados de hoje
+          </span>
+        </div>
         <div class="old-indicators">
           <div class="old-ind"><div class="old-ind-label">P/L <svg class="old-ind-q" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">?</text></svg></div><div class="old-ind-val">5,30</div></div>
           <div class="old-ind"><div class="old-ind-label">P/VP</div><div class="old-ind-val">1,40</div></div>
@@ -1391,6 +1519,59 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         </div>
         <h3>A abordagem SZilean</h3>
         <p>Projete receitas, custos e fluxos de caixa para os próximos 5 anos. Traga tudo a valor presente e descubra o valor justo.</p>
+
+        <!-- Seletor de horizonte de projeção -->
+        <div class="proj-year-tabs" id="projYearTabs">
+          <button class="proj-year-tab" data-year="0">Ano 1</button>
+          <button class="proj-year-tab" data-year="1">Ano 2</button>
+          <button class="proj-year-tab" data-year="2">Ano 3</button>
+          <button class="proj-year-tab" data-year="3">Ano 4</button>
+          <button class="proj-year-tab active" data-year="4">Ano 5</button>
+        </div>
+
+        <!-- Header dos indicadores projetados -->
+        <div class="new-ind-header">
+          <span class="new-ind-badge">
+            <span class="new-ind-badge-dot"></span>
+            Projetado
+          </span>
+          <span class="new-ind-year-label" id="projYearLabel">daqui a 5 anos</span>
+        </div>
+
+        <!-- Grid de indicadores projetados -->
+        <div class="new-indicators">
+          <div class="new-ind">
+            <div class="new-ind-label">ROE</div>
+            <div class="new-ind-val" id="projRoe">36,2%</div>
+            <div class="new-ind-delta pos" id="projRoeDelta">+9,7 p.p.</div>
+          </div>
+          <div class="new-ind">
+            <div class="new-ind-label">ROIC</div>
+            <div class="new-ind-val" id="projRoic">21,0%</div>
+            <div class="new-ind-delta pos" id="projRoicDelta">+7,8 p.p.</div>
+          </div>
+          <div class="new-ind">
+            <div class="new-ind-label">M.Bruta</div>
+            <div class="new-ind-val" id="projMBruta">55,4%</div>
+            <div class="new-ind-delta pos" id="projMBrutaDelta">+7,8 p.p.</div>
+          </div>
+          <div class="new-ind">
+            <div class="new-ind-label">M.Ebit</div>
+            <div class="new-ind-val" id="projMEbit">38,1%</div>
+            <div class="new-ind-delta pos" id="projMEbitDelta">+8,8 p.p.</div>
+          </div>
+          <div class="new-ind">
+            <div class="new-ind-label">EV/EBITDA</div>
+            <div class="new-ind-val" id="projEvEbitda">2,71</div>
+            <div class="new-ind-delta blue" id="projEvEbitdaDelta">−1,40×</div>
+          </div>
+          <div class="new-ind">
+            <div class="new-ind-label">P/L</div>
+            <div class="new-ind-val" id="projPL">3,56</div>
+            <div class="new-ind-delta blue" id="projPLDelta">−1,74×</div>
+          </div>
+        </div>
+
         <ul class="compare-card-items">
           <li>
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
@@ -2129,6 +2310,97 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 
   // Auto-switch every 7 seconds
   resetInterval();
+})();
+
+// ================================================================
+// PROJECTION YEAR SELECTOR
+// ================================================================
+(function() {
+  // Valores base (hoje)
+  const base = { roe: 26.49, roic: 13.21, mBruta: 47.63, mEbit: 29.27, evEbitda: 4.11, pl: 5.30 };
+
+  // Projeções para anos 1–5
+  const proj = [
+    { roe: 28.5,  roic: 14.8, mBruta: 49.1, mEbit: 31.2, evEbitda: 3.82, pl: 4.81 },
+    { roe: 30.8,  roic: 16.2, mBruta: 51.0, mEbit: 33.1, evEbitda: 3.52, pl: 4.43 },
+    { roe: 32.4,  roic: 17.9, mBruta: 52.3, mEbit: 34.6, evEbitda: 3.21, pl: 4.09 },
+    { roe: 34.1,  roic: 19.4, mBruta: 53.8, mEbit: 36.2, evEbitda: 2.94, pl: 3.81 },
+    { roe: 36.2,  roic: 21.0, mBruta: 55.4, mEbit: 38.1, evEbitda: 2.71, pl: 3.56 },
+  ];
+
+  const yearLabels = ['daqui a 1 ano', 'daqui a 2 anos', 'daqui a 3 anos', 'daqui a 4 anos', 'daqui a 5 anos'];
+
+  const tabs         = document.querySelectorAll('.proj-year-tab');
+  const elYearLabel  = document.getElementById('projYearLabel');
+  const elRoe        = document.getElementById('projRoe');
+  const elRoic       = document.getElementById('projRoic');
+  const elMBruta     = document.getElementById('projMBruta');
+  const elMEbit      = document.getElementById('projMEbit');
+  const elEvEbitda   = document.getElementById('projEvEbitda');
+  const elPL         = document.getElementById('projPL');
+  const elRoeDelta   = document.getElementById('projRoeDelta');
+  const elRoicDelta  = document.getElementById('projRoicDelta');
+  const elMBrutaDelta    = document.getElementById('projMBrutaDelta');
+  const elMEbitDelta     = document.getElementById('projMEbitDelta');
+  const elEvEbitdaDelta  = document.getElementById('projEvEbitdaDelta');
+  const elPLDelta        = document.getElementById('projPLDelta');
+
+  // Formatadores
+  const fmt1       = v => v.toFixed(1).replace('.', ',');
+  const fmt2       = v => v.toFixed(2).replace('.', ',');
+  const fmtPct     = v => fmt1(v) + '%';
+  const fmtMul     = v => fmt2(v);
+  const fmtDeltaPP = d => (d >= 0 ? '+' : '') + fmt1(d) + '\u00A0p.p.';
+  const fmtDeltaMul = d => (d >= 0 ? '+' : '\u2212') + fmt2(Math.abs(d)) + '\u00D7';
+
+  // Counter animation (ease-out cubic)
+  function animNum(el, from, to, duration, formatter) {
+    const t0 = performance.now();
+    (function step(now) {
+      const prog = Math.min((now - t0) / duration, 1);
+      const ease = 1 - Math.pow(1 - prog, 3);
+      el.textContent = formatter(from + (to - from) * ease);
+      if (prog < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  let current = 4; // Ano 5 por padrão
+
+  function switchYear(idx) {
+    const prev = proj[current];
+    const next = proj[idx];
+    const DUR  = 550;
+
+    // Atualiza tabs e label
+    tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+    elYearLabel.textContent = yearLabels[idx];
+
+    // Deltas vs. base (hoje)
+    const pDelta = { roe: prev.roe - base.roe, roic: prev.roic - base.roic, mBruta: prev.mBruta - base.mBruta, mEbit: prev.mEbit - base.mEbit, evEbitda: prev.evEbitda - base.evEbitda, pl: prev.pl - base.pl };
+    const nDelta = { roe: next.roe - base.roe, roic: next.roic - base.roic, mBruta: next.mBruta - base.mBruta, mEbit: next.mEbit - base.mEbit, evEbitda: next.evEbitda - base.evEbitda, pl: next.pl - base.pl };
+
+    // Anima valores projetados
+    animNum(elRoe,      prev.roe,      next.roe,      DUR, fmtPct);
+    animNum(elRoic,     prev.roic,     next.roic,     DUR, fmtPct);
+    animNum(elMBruta,   prev.mBruta,   next.mBruta,   DUR, fmtPct);
+    animNum(elMEbit,    prev.mEbit,    next.mEbit,    DUR, fmtPct);
+    animNum(elEvEbitda, prev.evEbitda, next.evEbitda, DUR, fmtMul);
+    animNum(elPL,       prev.pl,       next.pl,       DUR, fmtMul);
+
+    // Anima deltas
+    animNum(elRoeDelta,       pDelta.roe,      nDelta.roe,      DUR, fmtDeltaPP);
+    animNum(elRoicDelta,      pDelta.roic,     nDelta.roic,     DUR, fmtDeltaPP);
+    animNum(elMBrutaDelta,    pDelta.mBruta,   nDelta.mBruta,   DUR, fmtDeltaPP);
+    animNum(elMEbitDelta,     pDelta.mEbit,    nDelta.mEbit,    DUR, fmtDeltaPP);
+    animNum(elEvEbitdaDelta,  pDelta.evEbitda, nDelta.evEbitda, DUR, fmtDeltaMul);
+    animNum(elPLDelta,        pDelta.pl,       nDelta.pl,       DUR, fmtDeltaMul);
+
+    current = idx;
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => { if (i !== current) switchYear(i); });
+  });
 })();
 
 // ================================================================
