@@ -1047,7 +1047,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border-top-color: var(--primary);
 }
 .tooltip-btn:hover .tooltip-popup,
-.tooltip-btn:focus .tooltip-popup {
+.tooltip-btn.active .tooltip-popup {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
@@ -2954,6 +2954,34 @@ document.getElementById('scenTabs').addEventListener('click', function(e) {
   tab.classList.add('active');
   animateScenTo(scen);
 });
+
+// ================================================================
+// TOOLTIP BUTTONS — apenas um aberto por vez
+// ================================================================
+(function () {
+  const btns = document.querySelectorAll('.tooltip-btn');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      const isActive = btn.classList.contains('active');
+      // Fecha todos
+      btns.forEach(b => b.classList.remove('active'));
+      // Abre este, se não estava aberto
+      if (!isActive) btn.classList.add('active');
+    });
+
+    // Hover já é tratado pelo CSS; garante que hover não conflite com active de outro
+    btn.addEventListener('mouseenter', function () {
+      btns.forEach(b => { if (b !== btn) b.classList.remove('active'); });
+    });
+  });
+
+  // Clique fora fecha tudo
+  document.addEventListener('click', function () {
+    btns.forEach(b => b.classList.remove('active'));
+  });
+})();
 
 // ================================================================
 // CHART TOOLTIPS
