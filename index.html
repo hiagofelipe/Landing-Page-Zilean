@@ -396,7 +396,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .hero-mock-price-val {
   font-family: var(--font-mono);
-  font-weight: 700; font-size: 24px;
+  font-weight: 800; font-size: 28px;
   color: var(--positive);
 }
 .hero-mock-metrics {
@@ -419,7 +419,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .hero-metric-val {
   font-family: var(--font-mono);
-  font-weight: 700; font-size: 18px;
+  font-weight: 800; font-size: 21px;
   color: #fff;
 }
 .hero-metric-val.pos { color: var(--positive); }
@@ -1349,6 +1349,109 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .sz-z { color: var(--accent); font-weight: 700; }
 
 /* ============================================================
+   DDM ANIMATED CHART
+   ============================================================ */
+.ddm-chart-area {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.ddm-chart-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+.ddm-chart-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.ddm-fv { text-align: right; }
+.ddm-fv-label {
+  display: block;
+  font-size: 10px;
+  color: var(--text-3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1px;
+}
+.ddm-fv-val {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--text);
+  transition: color 0.6s ease;
+  letter-spacing: -0.5px;
+}
+.ddm-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 72px;
+  margin-bottom: 12px;
+}
+.ddm-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.ddm-bar {
+  width: 100%;
+  border-radius: 4px 4px 0 0;
+  min-height: 4px;
+  background: var(--accent);
+  transition: height 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.75s ease;
+}
+.ddm-bar-lbl {
+  font-size: 9px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+.ddm-spread-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ddm-spread-label {
+  font-size: 10px;
+  color: var(--text-3);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ddm-spread-track {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.ddm-spread-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--accent);
+  transition: width 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.75s ease;
+}
+.ddm-spread-pct {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-2);
+  min-width: 34px;
+  text-align: right;
+}
+
+/* ============================================================
    CHART TOOLTIP
    ============================================================ */
 .chart-tooltip {
@@ -1943,13 +2046,38 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           <span class="tooltip-demo-row-label">
             Taxa de Crescimento de Div. (g)
           </span>
-          <span class="tooltip-demo-row-val" style="color:var(--positive)">6,0%</span>
+          <span class="tooltip-demo-row-val" id="ddmGVal" style="color:var(--positive)">6,0%</span>
         </div>
         <div class="tooltip-demo-row">
           <span class="tooltip-demo-row-label">
             Custo Médio Ponderado de Capital (WACC)
           </span>
-          <span class="tooltip-demo-row-val">11,5%</span>
+          <span class="tooltip-demo-row-val" id="ddmWaccVal">11,5%</span>
+        </div>
+
+        <!-- DDM Chart Area -->
+        <div class="ddm-chart-area">
+          <div class="ddm-chart-top">
+            <span class="ddm-chart-label">Dividendos projetados (5 anos)</span>
+            <div class="ddm-fv">
+              <span class="ddm-fv-label">Valor justo est.</span>
+              <span class="ddm-fv-val" id="ddmFairValue">R$&nbsp;38,55</span>
+            </div>
+          </div>
+          <div class="ddm-bars" id="ddmBars">
+            <div class="ddm-bar-col"><div class="ddm-bar" id="ddmBar0"></div><span class="ddm-bar-lbl">A1</span></div>
+            <div class="ddm-bar-col"><div class="ddm-bar" id="ddmBar1"></div><span class="ddm-bar-lbl">A2</span></div>
+            <div class="ddm-bar-col"><div class="ddm-bar" id="ddmBar2"></div><span class="ddm-bar-lbl">A3</span></div>
+            <div class="ddm-bar-col"><div class="ddm-bar" id="ddmBar3"></div><span class="ddm-bar-lbl">A4</span></div>
+            <div class="ddm-bar-col"><div class="ddm-bar" id="ddmBar4"></div><span class="ddm-bar-lbl">A5</span></div>
+          </div>
+          <div class="ddm-spread-row">
+            <span class="ddm-spread-label">Spread WACC&minus;g</span>
+            <div class="ddm-spread-track">
+              <div class="ddm-spread-fill" id="ddmSpreadFill"></div>
+            </div>
+            <span class="ddm-spread-pct" id="ddmSpreadPct">5,5%</span>
+          </div>
         </div>
       </div>
       <div class="tooltip-demo-left reveal reveal-delay-2">
@@ -2168,13 +2296,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="faq-answer"><div class="faq-answer-inner">
-          O <strong>Dividend Discount Model (DDM)</strong> avalia uma ação com base no valor presente dos dividendos futuros esperados.
-          Em vez de projetar fluxos de caixa livres, o modelo desconta os proventos que a empresa distribuirá ao longo do tempo,
-          chegando ao preço justo da ação pela ótica de quem investe pelos dividendos.<br><br>
-          Ele é mais indicado para empresas <strong>maduras, estáveis e com histórico consistente de distribuição de proventos</strong>
-          — como utilities, bancos e empresas de setores regulados. Nesses casos, o DDM tende a ser mais preciso que o FCD
-          tradicional, pois o dividendo é um fluxo concreto e previsível para o acionista. Não é recomendado para empresas
-          em crescimento acelerado que reinvestem a maior parte do lucro e distribuem pouco ou nenhum dividendo.
+          O <strong>Dividend Discount Model (DDM)</strong> avalia uma ação ou cota de fundo imobiliário a partir do valor presente
+          dos dividendos futuros esperados. Diferentemente de modelos baseados em fluxo de caixa livre, o DDM foca diretamente
+          nos proventos que o investidor efetivamente receberá ao longo do tempo, chegando ao valor justo do ativo sob a ótica
+          de quem investe visando renda.<br><br>
+          Esse modelo é mais indicado para empresas <strong>maduras, estáveis e com histórico consistente de distribuição de
+          dividendos</strong> — como utilities, bancos e companhias de setores regulados — além de fundos de investimento
+          imobiliário. Nesses casos, o DDM tende a ser mais preciso do que o fluxo de caixa descontado tradicional, já que
+          o dividendo representa um fluxo mais concreto e previsível para o acionista. Por outro lado, não é recomendado para
+          empresas em fase de crescimento acelerado, que reinvestem a maior parte dos lucros e distribuem poucos ou nenhum dividendo.
         </div></div>
       </div>
     </div>
@@ -2437,7 +2567,7 @@ document.querySelectorAll('.faq-question').forEach(btn => {
   let intervalId;
   function resetInterval() {
     clearInterval(intervalId);
-    intervalId = setInterval(() => switchTo((current + 1) % companies.length), 5000);
+    intervalId = setInterval(() => switchTo((current + 1) % companies.length), 4000);
   }
   dots.forEach((dot, i) => {
     dot.style.cursor = 'pointer';
@@ -3070,6 +3200,117 @@ document.getElementById('scenTabs').addEventListener('click', function(e) {
   tab.classList.add('active');
   animateScenTo(scen);
 });
+
+// ================================================================
+// DDM ANIMATED CARD
+// ================================================================
+(function () {
+  const D0 = 2.00; // Dividendo base (R$)
+
+  const scenarios = [
+    { g: 6.0, wacc: 11.5, color: '#0EA5E9', gColor: '#059669' }, // Base
+    { g: 7.5, wacc: 10.0, color: '#10B981', gColor: '#10B981' }, // Otimista
+    { g: 5.5, wacc: 12.0, color: '#6366F1', gColor: '#059669' }, // Neutro
+    { g: 4.0, wacc: 13.5, color: '#EF4444', gColor: '#EF4444' }, // Pessimista
+  ];
+
+  // DDM formula: P = D1 / (wacc - g)
+  function fairValue(g, wacc) {
+    const D1 = D0 * (1 + g / 100);
+    const spread = (wacc - g) / 100;
+    return spread > 0 ? D1 / spread : 999;
+  }
+
+  // Dividendos projetados para N anos
+  function projDivs(g, n) {
+    return Array.from({ length: n }, (_, i) => D0 * Math.pow(1 + g / 100, i + 1));
+  }
+
+  // Escala global dos dividendos (todos os cenários, 5 anos)
+  const allDivs = scenarios.flatMap(s => projDivs(s.g, 5));
+  const dMin = Math.min(...allDivs) * 0.92;
+  const dMax = Math.max(...allDivs) * 1.04;
+  function barPct(v) { return ((v - dMin) / (dMax - dMin) * 82 + 14); } // 14%–96%
+
+  // Refs DOM
+  const elG          = document.getElementById('ddmGVal');
+  const elWacc       = document.getElementById('ddmWaccVal');
+  const elFV         = document.getElementById('ddmFairValue');
+  const elSpreadFill = document.getElementById('ddmSpreadFill');
+  const elSpreadPct  = document.getElementById('ddmSpreadPct');
+  const barEls       = [0,1,2,3,4].map(i => document.getElementById('ddmBar' + i));
+
+  const MAX_SPREAD = 11.0; // para escala da barra de spread
+
+  function fmtPct(v) { return v.toFixed(1).replace('.', ',') + '%'; }
+  function fmtMoney(v) { return 'R$\u00A0' + v.toFixed(2).replace('.', ','); }
+
+  // Counter animation (ease-out cubic)
+  function anim(el, from, to, dur, fmt) {
+    const t0 = performance.now();
+    (function step(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(from + (to - from) * e);
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  let current = 0;
+
+  function applyScenario(fromIdx, toIdx) {
+    const from = scenarios[fromIdx];
+    const to   = scenarios[toIdx];
+    const DUR  = 720;
+
+    // Anima g e WACC
+    anim(elG,    from.g,    to.g,    DUR, fmtPct);
+    anim(elWacc, from.wacc, to.wacc, DUR, fmtPct);
+    elG.style.color = to.gColor;
+
+    // Anima valor justo
+    const fromFV = fairValue(from.g, from.wacc);
+    const toFV   = fairValue(to.g,   to.wacc);
+    anim(elFV, fromFV, toFV, DUR, fmtMoney);
+    elFV.style.color = to.color;
+
+    // Barras de dividendos
+    const divs = projDivs(to.g, 5);
+    barEls.forEach((bar, i) => {
+      bar.style.height    = barPct(divs[i]).toFixed(1) + '%';
+      bar.style.backgroundColor = to.color;
+    });
+
+    // Spread
+    const fromSpread = from.wacc - from.g;
+    const toSpread   = to.wacc   - to.g;
+    anim(elSpreadPct, fromSpread, toSpread, DUR, fmtPct);
+    elSpreadFill.style.width = Math.min(toSpread / MAX_SPREAD * 100, 100).toFixed(1) + '%';
+    elSpreadFill.style.backgroundColor = to.color;
+
+    current = toIdx;
+  }
+
+  // Estado inicial
+  const init = scenarios[0];
+  const initDivs = projDivs(init.g, 5);
+  barEls.forEach((bar, i) => {
+    bar.style.height          = barPct(initDivs[i]).toFixed(1) + '%';
+    bar.style.backgroundColor = init.color;
+  });
+  elFV.textContent   = fmtMoney(fairValue(init.g, init.wacc));
+  elFV.style.color   = init.color;
+  const initSpread   = init.wacc - init.g;
+  elSpreadFill.style.width           = (initSpread / MAX_SPREAD * 100).toFixed(1) + '%';
+  elSpreadFill.style.backgroundColor = init.color;
+  elSpreadPct.textContent = fmtPct(initSpread);
+
+  // Cicla a cada 4 segundos
+  setInterval(() => {
+    const next = (current + 1) % scenarios.length;
+    applyScenario(current, next);
+  }, 4000);
+})();
 
 // ================================================================
 // TOOLTIP BUTTONS — apenas um aberto por vez
