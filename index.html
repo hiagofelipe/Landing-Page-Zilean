@@ -1935,7 +1935,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
          </div>
-         <h3 style="font-family: var(--font-display); font-weight: 700; font-size: 22px; margin-bottom: 12px; letter-spacing: -0.3px; color: var(--text);">Foco em Dividendos</h3>
+         <h3 style="font-family: var(--font-display); font-weight: 700; font-size: 22px; margin-bottom: 12px; letter-spacing: -0.3px; color: var(--text);">Análise por Dividendos</h3>
          <p style="font-size: 15px; line-height: 1.7; color: var(--text-2); margin-bottom: 24px;">
            Nem toda empresa é melhor avaliada pelo Fluxo de Caixa Descontado tradicional. Para setores consolidados e empresas focadas em forte distribuição de proventos, o DDM revela o valor justo sob a ótica dos dividendos futuros, de forma prática e imediata.
          </p>
@@ -2157,8 +2157,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
         </button>
         <div class="faq-answer"><div class="faq-answer-inner">
           Sim, <strong>100% gratuito</strong>. Sem período de teste, sem planos pagos, sem limites de uso.
-          O <span class="sz-z">Z</span>ilean existe para elevar o nível de análise do investidor brasileiro, oferecendo uma
+          O S<span class="sz-z">Z</span>ilean existe para elevar o nível de análise do investidor brasileiro, oferecendo uma
           ferramenta profissional de valuation acessível a todos. Basta criar sua conta e começar.
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Como funciona o DDM e quando ele é mais indicado?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer"><div class="faq-answer-inner">
+          O <strong>Dividend Discount Model (DDM)</strong> avalia uma ação com base no valor presente dos dividendos futuros esperados.
+          Em vez de projetar fluxos de caixa livres, o modelo desconta os proventos que a empresa distribuirá ao longo do tempo,
+          chegando ao preço justo da ação pela ótica de quem investe pelos dividendos.<br><br>
+          Ele é mais indicado para empresas <strong>maduras, estáveis e com histórico consistente de distribuição de proventos</strong>
+          — como utilities, bancos e empresas de setores regulados. Nesses casos, o DDM tende a ser mais preciso que o FCD
+          tradicional, pois o dividendo é um fluxo concreto e previsível para o acionista. Não é recomendado para empresas
+          em crescimento acelerado que reinvestem a maior parte do lucro e distribuem pouco ou nenhum dividendo.
         </div></div>
       </div>
     </div>
@@ -2429,6 +2445,54 @@ document.querySelectorAll('.faq-question').forEach(btn => {
       if (i !== current) { switchTo(i); resetInterval(); }
     });
   });
+
+  // ── Drag / swipe para trocar empresa ─────────────────────────
+  const card = document.querySelector('.hero-mock');
+  const THRESHOLD = 40; // px mínimos para considerar swipe
+  let dragStartX = null, dragStartY = null, isDragging = false;
+
+  function dragStart(x, y) { dragStartX = x; dragStartY = y; isDragging = false; }
+
+  function dragMove(x) {
+    if (dragStartX === null) return;
+    if (Math.abs(x - dragStartX) > 6) isDragging = true;
+  }
+
+  function dragEnd(x) {
+    if (dragStartX === null) return;
+    const dx = x - dragStartX;
+    dragStartX = null;
+    if (!isDragging || Math.abs(dx) < THRESHOLD) return;
+    const next = dx < 0
+      ? (current + 1) % companies.length          // arrasta para esquerda → próxima
+      : (current - 1 + companies.length) % companies.length; // direita → anterior
+    if (next !== current) { switchTo(next); resetInterval(); }
+  }
+
+  // Mouse
+  card.addEventListener('mousedown',  e => dragStart(e.clientX, e.clientY));
+  card.addEventListener('mousemove',  e => dragMove(e.clientX));
+  card.addEventListener('mouseup',    e => dragEnd(e.clientX));
+  card.addEventListener('mouseleave', e => { if (isDragging) dragEnd(e.clientX); dragStartX = null; });
+  // Impede seleção de texto durante drag
+  card.addEventListener('dragstart', e => e.preventDefault());
+
+  // Touch
+  card.addEventListener('touchstart', e => {
+    const t = e.touches[0]; dragStart(t.clientX, t.clientY);
+  }, { passive: true });
+  card.addEventListener('touchmove', e => {
+    dragMove(e.touches[0].clientX);
+  }, { passive: true });
+  card.addEventListener('touchend', e => {
+    dragEnd(e.changedTouches[0].clientX);
+  });
+
+  // Cursor visual
+  card.style.cursor = 'grab';
+  card.addEventListener('mousedown', () => { card.style.cursor = 'grabbing'; });
+  card.addEventListener('mouseup',   () => { card.style.cursor = 'grab'; });
+  card.addEventListener('mouseleave',() => { card.style.cursor = 'grab'; });
 
   // Auto-switch every 7 seconds
   resetInterval();
